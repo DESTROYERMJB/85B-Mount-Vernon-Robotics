@@ -2,12 +2,10 @@
 
 #include  "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
-ASSET(blueWinPoint1_txt);
-ASSET(blueWinPoint2_txt);
-ASSET(blueWinPoint3_txt);
-ASSET(redWinPoint1_txt);
-ASSET(redWinPoint2_txt);
-ASSET(redWinPoint3_txt);
+ASSET(redauton_txt);
+ASSET(redauton1_txt);
+ASSET(blueauton_txt);
+ASSET(blueauton1_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::MotorGroup leftMotors({-15,-19,-17},pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({9,10,8},pros::MotorGearset::blue);
@@ -46,14 +44,14 @@ lemlib::ControllerSettings lateral_controller(15, // proportional gain (kP)
 );
 
 // angular PID controller
-lemlib::ControllerSettings angular_controller(10, // proportional gain (kP)
+lemlib::ControllerSettings angular_controller(7, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              95, // derivative gain (kD)
-                                              0, // anti windup
-                                              0, // small error range, in inches
-                                              0, // small error range timeout, in milliseconds
-                                              0, // large error range, in inches
-                                              0, // large error range timeout, in milliseconds
+                                              60, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
 
@@ -62,7 +60,7 @@ lemlib::Chassis chassis(drivetrain, // drivetrain settings
                         angular_controller, // angular PID settings
                         sensors // odometry sensors
 );
-int clampState = 0;
+int clampState = 1;
 int rolling = 0;
 
 void ring(){
@@ -78,16 +76,24 @@ void ring(){
             conveyor.move(-90);
             rolling=1;
             pros::delay(500);
-        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)==1 or controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling ==1){
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling ==1){
             intake.move(0);
             conveyor.move(0);
             rolling=0;
             pros::delay(500);
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1 and rolling ==1){
+            intake.move(-127);
+            conveyor.move(-90);
+            pros::delay(500);
+            intake.move(127);
+            conveyor.move(127);
         }
     }
 }
-
-
+//auton variable 0=red 1=blue
+int selector = 0;
+bool selected = true;
+//auton selector
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -98,6 +104,7 @@ void initialize() {
     pros::Controller master(pros::E_CONTROLLER_MASTER);
     chassis.calibrate(); // calibrate sensors
     pros::lcd::initialize();
+    controller.print(1,7,"<Red  Blue>");
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     conveyor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -134,15 +141,29 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
-    // set position to x:0, y:0, heading:0
-    chassis.setPose(0, 0, 0);
-    // turn to face heading 90 with a very long timeout
-    chassis.turnToHeading(90, 100000);
-    //pros::ADIPneumatics clamp('a',false,false);
+    pros::ADIPneumatics clamp('a',false,false);
+    if(selector==0){
+        chassis.setPose(-46.286, 42.492, 310);
+        chassis.follow(redauton_txt,15,2000,false,false);
+        clamp.extend();
+        intake.move(127);
+        conveyor.move(127);
+        pros::delay(500);
+        chassis.follow(redauton1_txt,15,2000);
+    }else if (selector==1){
+        chassis.setPose(46.286, 42.492, 50);
+        chassis.follow(blueauton_txt,15,2000,false,false);
+        clamp.extend();
+        intake.move(127);
+        conveyor.move(127);
+        pros::delay(500);
+        chassis.follow(blueauton1_txt,15,2000);
+    }
+    
 
 }
 void ClampF(){
-    pros::ADIPneumatics clamp('a',false,false);
+    pros::ADIPneumatics clamp('a',true,false);
     while(true){
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2) and clampState==0){
             clamp.extend();
