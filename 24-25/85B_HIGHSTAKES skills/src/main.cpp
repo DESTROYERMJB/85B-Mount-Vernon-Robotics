@@ -185,6 +185,7 @@ void ClampF(){
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+    pros::ADIPneumatics clamp('a',false,false);
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::Task ringTask(ring);
     pros::Task clampTask(ClampF);
