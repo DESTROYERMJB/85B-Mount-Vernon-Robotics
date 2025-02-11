@@ -9,20 +9,20 @@ ASSET(redWinPoint1_txt);
 ASSET(redWinPoint2_txt);
 ASSET(redWinPoint3_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
-pros::MotorGroup leftMotors({-15,-19,-17},pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({9,10,8},pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-18,-16,-20},pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({13,12,15},pros::MotorGearset::blue);
 lemlib::Drivetrain drivetrain(&leftMotors,
                               &rightMotors,
                               16,
                               lemlib::Omniwheel::NEW_325,
                               360,
                               2);
-pros::Motor intake(1,pros::MotorGearset::green);
-pros::Motor conveyor(-12,pros::MotorGearset::red);
+pros::Motor intake(8,pros::MotorGearset::green);
+pros::Motor conveyor(-1,pros::MotorGearset::blue);
 //odom parts
 pros::Imu imu(13);
-pros::Rotation horizontalEnc(2);
-pros::Rotation verticalEnc(14);
+pros::Rotation horizontalEnc(17);
+pros::Rotation verticalEnc(19);
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_325, -0.125);
 lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_325, -1.625);
 //odometry setting
