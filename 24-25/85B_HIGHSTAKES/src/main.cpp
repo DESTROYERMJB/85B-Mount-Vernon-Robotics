@@ -88,7 +88,7 @@ void ring(){
 }
 //auton variable 0=red 1=blue
 int selector = 0;
-bool selected = true;
+bool selected = false;
 //auton selector
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -100,10 +100,12 @@ void initialize() {
     pros::Controller master(pros::E_CONTROLLER_MASTER);
     chassis.calibrate(); // calibrate sensors
     pros::lcd::initialize();
-    controller.print(1,7,"<Red  Blue>");
+    controller.print(1,7,"<Red              Blue>");
+    while(!selected){
+
+    }
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    pros::delay(25);
 }
 
 /**
@@ -194,6 +196,7 @@ void opcontrol() {
 		int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
         chassis.tank(leftY,rightY);
+        std::uint8_t state = pros::lcd::read_buttons();
         pros::delay(25);
 	}
 }
