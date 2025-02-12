@@ -62,14 +62,14 @@ lemlib::Chassis chassis(drivetrain, // drivetrain settings
                         sensors // odometry sensors
 );
 //auton task
-rd::Selector selector({
-    {"Red auto", red_auton},
-    {"Blue auto", blue_auton},
-});
 void red_auton(){
 }
 void blue_auton(){
 }
+rd::Selector selector({
+    {"Red auto", red_auton},
+    {"Blue auto", blue_auton},
+});
 //Task for scoring rings
 int clampState = 1;
 int rolling = 0;
