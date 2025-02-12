@@ -103,10 +103,10 @@ void initialize() {
     pros::lcd::initialize();
     controller.print(1,7,"<Red              Blue>");
     while(!selected){
-        if(pros::lcd::read_buttons()==100){
+        if(pros::lcd::read_buttons()=='100'){
             pros::lcd::print(1,"Red selected");
             selected=true;
-        } else if(pros::lcd::read_buttons()==001){
+        } else if(pros::lcd::read_buttons()=='001'){
             pros::lcd::print(1,"Blue selected");
             selected=true;
         }
