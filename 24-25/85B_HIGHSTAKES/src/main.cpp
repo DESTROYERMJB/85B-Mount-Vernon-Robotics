@@ -81,6 +81,8 @@ void ring(){
             intake.move(-127);
             pros::delay(500);
             intake.move(127);
+        }else{
+            
         }
     }
 }
@@ -164,6 +166,8 @@ void ClampF(){
             clamp.retract();
             clampState=0;
             pros::delay(500);
+        } else{
+            pros::delay(20);
         }
     }
 }
@@ -190,11 +194,6 @@ void opcontrol() {
 		int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
         chassis.tank(leftY,rightY);
-        if(heat==1 and (leftMotors.is_over_temp()==1 or rightMotors.is_over_temp()==1)){
-            controller.rumble(". . . .");
-            controller.print(0,0,"Drivetrain over heating");
-            heat = 0;
-        }
         pros::delay(25);
 	}
 }
