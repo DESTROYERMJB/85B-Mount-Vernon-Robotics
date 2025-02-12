@@ -195,6 +195,7 @@ void ClampF(){
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+    pros::lcd::print(7,"driver controll");
     chassis.cancelAllMotions();
     int heat = 1;
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
