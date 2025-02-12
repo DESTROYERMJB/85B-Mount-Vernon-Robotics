@@ -3,6 +3,7 @@
 #include  "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "pros/llemu.hpp"
+#include "robodash/api.h"
 ASSET(redauton_txt);
 ASSET(redauton1_txt);
 ASSET(blueauton_txt);
@@ -60,6 +61,16 @@ lemlib::Chassis chassis(drivetrain, // drivetrain settings
                         angular_controller, // angular PID settings
                         sensors // odometry sensors
 );
+//auton task
+rd::Selector selector({
+    {"Red auto", red_auton},
+    {"Blue auto", blue_auton},
+});
+void red_auton(){
+}
+void blue_auton(){
+}
+//Task for scoring rings
 int clampState = 1;
 int rolling = 0;
 
@@ -88,7 +99,7 @@ void ring(){
     }
 }
 //auton variable 0=red 1=blue
-int selector = 0;
+int selectors = 0;
 bool selected = false;
 //auton selector
 /**
@@ -100,18 +111,6 @@ bool selected = false;
 void initialize() {
     pros::Controller master(pros::E_CONTROLLER_MASTER);
     chassis.calibrate(); // calibrate sensors
-    pros::lcd::initialize();
-    controller.print(1,7,"<Red              Blue>");
-    while(!selected){
-        if(pros::lcd::read_buttons()=='100'){
-            pros::lcd::print(1,"Red selected");
-            selected=true;
-        } else if(pros::lcd::read_buttons()=='001'){
-            pros::lcd::print(1,"Blue selected");
-            selected=true;
-        }
-        pros::delay(20);
-    }
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 }
@@ -147,14 +146,14 @@ void competition_initialize() {
  */
 void autonomous() {
     pros::ADIPneumatics clamp('a',false,false);
-    if(selector==0){
+    if(selectors==0){
         chassis.setPose(-46.286, 42.492, 310);
         chassis.follow(redauton_txt,15,2000,false,false);
         clamp.extend();
         intake.move(127);
         pros::delay(500);
         chassis.follow(redauton1_txt,15,2000);
-    }else if (selector==1){
+    }else if (selectors==1){
         chassis.setPose(46.286, 42.492, 50);
         chassis.follow(blueauton_txt,15,2000,false,false);
         clamp.extend();
@@ -195,7 +194,6 @@ void ClampF(){
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-    pros::lcd::print(7,"driver controll");
     chassis.cancelAllMotions();
     int heat = 1;
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
@@ -205,7 +203,6 @@ void opcontrol() {
 		int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
         chassis.tank(leftY,rightY);
-        std::uint8_t state = pros::lcd::read_buttons();
         pros::delay(25);
 	}
 }
