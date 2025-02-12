@@ -7,20 +7,19 @@ ASSET(redauton1_txt);
 ASSET(blueauton_txt);
 ASSET(blueauton1_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
-pros::MotorGroup leftMotors({-15,-19,-17},pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({9,10,8},pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-18,-16,-20},pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({13,12,15},pros::MotorGearset::blue);
 lemlib::Drivetrain drivetrain(&leftMotors,
                               &rightMotors,
                               16,
                               lemlib::Omniwheel::NEW_325,
                               360,
                               2);
-pros::Motor intake(1,pros::MotorGearset::green);
-pros::Motor conveyor(-12,pros::MotorGearset::red);
+pros::Motor intake(-1,pros::MotorGearset::green);
 //odom parts
 pros::Imu imu(13);
-pros::Rotation horizontalEnc(2);
-pros::Rotation verticalEnc(14);
+pros::Rotation horizontalEnc(17);
+pros::Rotation verticalEnc(19);
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_325, -0.125);
 lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_325, -1.625);
 //odometry setting
@@ -34,7 +33,7 @@ lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel 1, set to null
 // lateral PID controller
 lemlib::ControllerSettings lateral_controller(15, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              7, // derivative gain (kD)
+                                              5, // derivative gain (kD)
                                               3, // anti windup
                                               1, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
@@ -68,25 +67,20 @@ void ring(){
     while(true){
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling==0){
             intake.move(127);
-            conveyor.move(127);
             rolling=1;
             pros::delay(500);
         }else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)==1 and rolling==0){
             intake.move(-127);
-            conveyor.move(-90);
             rolling=1;
             pros::delay(500);
         } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling ==1){
             intake.move(0);
-            conveyor.move(0);
             rolling=0;
             pros::delay(500);
         } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1 and rolling ==1){
             intake.move(-127);
-            conveyor.move(-90);
             pros::delay(500);
             intake.move(127);
-            conveyor.move(127);
         }
     }
 }
@@ -107,7 +101,6 @@ void initialize() {
     controller.print(1,7,"<Red  Blue>");
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    conveyor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     pros::delay(25);
 }
 
@@ -147,7 +140,6 @@ void autonomous() {
         chassis.follow(redauton_txt,15,2000,false,false);
         clamp.extend();
         intake.move(127);
-        conveyor.move(127);
         pros::delay(500);
         chassis.follow(redauton1_txt,15,2000);
     }else if (selector==1){
@@ -155,7 +147,6 @@ void autonomous() {
         chassis.follow(blueauton_txt,15,2000,false,false);
         clamp.extend();
         intake.move(127);
-        conveyor.move(127);
         pros::delay(500);
         chassis.follow(blueauton1_txt,15,2000);
     }
