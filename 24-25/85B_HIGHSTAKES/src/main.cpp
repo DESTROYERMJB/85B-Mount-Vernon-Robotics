@@ -2,6 +2,7 @@
 
 #include  "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "pros/llemu.hpp"
 ASSET(redauton_txt);
 ASSET(redauton1_txt);
 ASSET(blueauton_txt);
@@ -102,7 +103,14 @@ void initialize() {
     pros::lcd::initialize();
     controller.print(1,7,"<Red              Blue>");
     while(!selected){
-
+        if(pros::lcd::read_buttons()==100){
+            pros::lcd::print(1,"Red selected");
+            selected=true;
+        } else if(pros::lcd::read_buttons()==001){
+            pros::lcd::print(1,"Blue selected");
+            selected=true;
+        }
+        pros::delay(20);
     }
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
