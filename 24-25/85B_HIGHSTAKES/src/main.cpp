@@ -11,13 +11,14 @@ ASSET(blueauton1_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::MotorGroup leftMotors({-18,-16,-20},pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({13,12,15},pros::MotorGearset::blue);
+pros::MotorGroup lift({-11,10},pros::MotorGearset::green);
 lemlib::Drivetrain drivetrain(&leftMotors,
                               &rightMotors,
                               16,
                               lemlib::Omniwheel::NEW_325,
                               360,
                               2);
-pros::Motor intake(-1,pros::MotorGearset::green);
+pros::Motor intake(1,pros::MotorGearset::green);
 //odom parts
 pros::Imu imu(13);
 pros::Rotation horizontalEnc(17);
@@ -70,34 +71,6 @@ rd::Selector selector({
     {"Red auto", red_auton},
     {"Blue auto", blue_auton},
 });
-//Task for scoring rings
-int clampState = 1;
-int rolling = 0;
-
-void ring(){
-    int rolling=0;
-    while(true){
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling==0){
-            intake.move(127);
-            rolling=1;
-            pros::delay(500);
-        }else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)==1 and rolling==0){
-            intake.move(-127);
-            rolling=1;
-            pros::delay(500);
-        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling ==1){
-            intake.move(0);
-            rolling=0;
-            pros::delay(500);
-        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1 and rolling ==1){
-            intake.move(-127);
-            pros::delay(500);
-            intake.move(127);
-        }else{
-            
-        }
-    }
-}
 //auton variable 0=red 1=blue
 int selectors = 0;
 bool selected = false;
@@ -113,6 +86,8 @@ void initialize() {
     chassis.calibrate(); // calibrate sensors
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    lift.set_encoder_units_all(pros::E_MOTOR_ENCODER_DEGREES);
 }
 
 /**
@@ -164,6 +139,49 @@ void autonomous() {
     
 
 }
+
+
+//Task for scoring rings
+int clampState = 1;
+int rolling = 0;
+
+
+void ring(){
+    int rolling=0;
+    while(true){
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling==0){
+            intake.move(127);
+            rolling=1;
+            pros::delay(200);
+        }else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)==1 and rolling==0){
+            intake.move(-127);
+            rolling=1;
+            pros::delay(200);
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling ==1){
+            intake.move(0);
+            rolling=0;
+            pros::delay(200);
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1 and rolling ==1){
+            intake.move(127);
+            pros::delay(200);
+
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)==1){
+            lift.move_absolute(350,200);
+            pros::delay(200);
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)==1){
+            lift.move_absolute(0,90);
+            pros::delay(200);
+        } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)==1){
+            lift.move_absolute(150,90);
+            pros::delay(200);
+        } else{
+            pros::delay(20);
+        }
+    }
+}
+
+
+//task that runs the clamp
 void ClampF(){
     pros::ADIPneumatics clamp('a',true,false);
     while(true){
