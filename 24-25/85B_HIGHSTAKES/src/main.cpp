@@ -6,8 +6,16 @@
 #include "robodash/api.h"
 ASSET(redauton_txt);
 ASSET(redauton1_txt);
+ASSET(redauton2_txt);
+ASSET(redauton3_txt);
+ASSET(redauton4_txt);
+ASSET(redauton5_txt);
 ASSET(blueauton_txt);
 ASSET(blueauton1_txt);
+ASSET(blueauton2_txt);
+ASSET(blueauton3_txt);
+ASSET(blueauton4_txt);
+ASSET(blueauton5_txt);
 ASSET(skills_txt);
 ASSET(skills1_txt);
 ASSET(skills2_txt);
@@ -35,7 +43,7 @@ lemlib::Drivetrain drivetrain(&leftMotors,
 pros::Motor intake(1,pros::MotorGearset::green);
 pros::Vision vision_sensor(14);
 //odom parts
-pros::Imu imu(13);
+pros::Imu imu(21);
 pros::Rotation horizontalEnc(17);
 pros::Rotation verticalEnc(19);
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_325, -0.125);
@@ -61,9 +69,9 @@ lemlib::ControllerSettings lateral_controller(15, // proportional gain (kP)
 );
 
 // angular PID controller
-lemlib::ControllerSettings angular_controller(7, // proportional gain (kP)
+lemlib::ControllerSettings angular_controller(5, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              60, // derivative gain (kD)
+                                              55, // derivative gain (kD)
                                               3, // anti windup
                                               1, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
@@ -84,38 +92,61 @@ void red_auton(){
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=0;
     //auton
-    chassis.setPose(-46.286, 42.492, 310);
-    chassis.follow(redauton_txt,15,2000,false,false);
+    chassis.setPose(-53.625, 42.625, 305);
+    chassis.follow(redauton_txt,15,3000,false,false);
     clamp.extend();
     intake.move(127);
     pros::delay(500);
-    chassis.follow(redauton1_txt,15,2000);
+    chassis.turnToHeading(0,1000,{},false);
+    chassis.follow(redauton1_txt,10,3000,true,false);
+    chassis.turnToHeading(90,1000,{},false);
+    chassis.follow(redauton2_txt,10,3000,true,false);
+    chassis.follow(redauton3_txt,10,3000,false,false);
+    intake.move(0);
+    chassis.turnToHeading(245,1000,{},false);
+    lift.move_absolute(200,200);
+    chassis.follow(redauton4_txt,5,5000,true,false);
+    chassis.turnToHeading(270,1000,{.direction=AngularDirection::CCW_COUNTERCLOCKWISE},false);
+    chassis.follow(redauton5_txt,10,2000,true,false);
+    lift.move_absolute(110,200);
 }
 void blue_auton(){
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=1;
     //auton
-    chassis.setPose(46.286, 42.492, 50);
-    chassis.follow(blueauton_txt,15,2000,false,false);
+    chassis.setPose(53.625, 42.625, 55);
+    chassis.follow(blueauton_txt,10,3000,false,false);
     clamp.extend();
     intake.move(127);
     pros::delay(500);
-    chassis.follow(blueauton1_txt,15,2000);
+    chassis.turnToHeading(0,1000,{},false);
+    chassis.follow(blueauton1_txt,10,3000,true,false);
+    chassis.turnToHeading(270,1000,{},false);
+    chassis.follow(blueauton2_txt,10,3000,true,false);
+    chassis.follow(blueauton3_txt,10,3000,false,false);
+    intake.move(0);
+    chassis.turnToHeading(115,1000,{},false);
+    lift.move_absolute(200,200);
+    chassis.follow(blueauton4_txt,5,5000,true,false);
+    chassis.turnToHeading(90,1000,{.direction=AngularDirection::CW_CLOCKWISE},false);
+    chassis.follow(blueauton5_txt,10,2000,true,false);
+    lift.move_absolute(110,200);
 }
 void skills(){
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=1;
     //auton
     chassis.setPose(-60.25,0,270);
-    chassis.follow(skills_txt,10,2000,false,false);
+    chassis.moveToPoint(-47,0,2000,{.forwards=false},false);
     chassis.turnToHeading(180,1000,{},false);
-    chassis.follow(skills1_txt,10,2000,false,false);
+    chassis.moveToPoint(-47,24,2000,{.forwards=false},false);
     clamp.extend();
     pros::delay(200);
     intake.move(127);
     pros::delay(200);
     chassis.turnToHeading(90,1000,{},false);
-    chassis.follow(skills2_txt,10,4000,true,false);
+    chassis.moveToPoint(-24,24,2000,{},false);
+    pros::delay(200);
     chassis.turnToHeading(0,1000,{},false);
     chassis.follow(skills3_txt,10,4000,true,false);
     pros::delay(500);
@@ -123,7 +154,7 @@ void skills(){
     chassis.follow(skills4_txt,10,2000,true,false);
     pros::delay(500);
     chassis.follow(skills5_txt,10,2000,false,false);
-    chassis.turnToHeading(287,1000,{},false);
+    chassis.turnToHeading(295,1000,{},false);
     chassis.follow(skills6_txt,10,2000,true,false);
     //chassis.turnToHeading(150,1000,{},false);
     //chassis.follow(skills7_txt,10,2000,false,false);
@@ -189,11 +220,7 @@ void autonomous() {
 //Task for scoring rings
 int clampState = 1;
 int rolling = 0;
-void wall(){
-    while(true){
-        pros::delay(20);
-    }
-}
+
 
 pros::vision_signature_s_t red_ring = pros::Vision::signature_from_utility(1, 9137, 14497, 11818, -1725, -441, -1084, 3.000, 0);
 pros::vision_signature_s_t blue_ring = pros::Vision::signature_from_utility(2, -4309, -3055, -3682, 6115, 10307, 8210, 3.000, 0); 
@@ -214,7 +241,6 @@ void ring(){
             pros::delay(200);
         } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1){
             intake.move(127);
-            //wall();
             //pros::delay(200);
 
         } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)==1){
