@@ -324,7 +324,6 @@ void opcontrol() {
             lift.set_zero_position_all(0);
         }
         console.clear();
-        console.printf("proximity: %f", color_sensor.get_proximity());
-        pros::delay(25);
+        console.printf("Proximity: %f \n Hue: %f", color_sensor.get_proximity(),color_sensor.get_hue());
 	}
 }
