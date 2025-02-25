@@ -311,6 +311,7 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::Task ringTask(ring);
     pros::Task clampTask(ClampF);
+    color_sensor.set_led_pwm(100);
 	while (true) {
 		int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
