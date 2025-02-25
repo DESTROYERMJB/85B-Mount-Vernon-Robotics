@@ -318,7 +318,12 @@ void opcontrol() {
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)==1){
             lift.set_zero_position_all(0);
         }
-        console.printf("color: %f",color_sensor.get_hue());
+        console.clear();
+        if(color_sensor.get_hue()<=20 and color_sensor.get_hue()>=0){
+            console.print("Red Ring");
+        } else if(color_sensor.get_hue()<=230 and color_sensor.get_hue()>=200){
+            console.print("Blue Ring");
+        }
         pros::delay(25);
 	}
 }
