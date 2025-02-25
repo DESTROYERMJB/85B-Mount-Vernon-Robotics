@@ -307,6 +307,7 @@ void ClampF(){
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+    color_sensor.set_led_pwm(100);
     chassis.cancelAllMotions();
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::Task ringTask(ring);
@@ -318,6 +319,7 @@ void opcontrol() {
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)==1){
             lift.set_zero_position_all(0);
         }
+        console.clear();
         console.printf("color: %f",color_sensor.get_hue());
         pros::delay(25);
 	}
