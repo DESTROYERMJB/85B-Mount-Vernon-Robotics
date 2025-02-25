@@ -40,7 +40,7 @@ lemlib::Drivetrain drivetrain(&leftMotors,
                               360,
                               2);
 pros::Motor intake(1,pros::MotorGearset::green);
-pros::Vision vision_sensor(14);
+pros::Optical color_sensor(14);
 //odom parts
 pros::Imu imu(21);
 pros::Rotation horizontalEnc(17);
@@ -318,6 +318,7 @@ void opcontrol() {
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)==1){
             lift.set_zero_position_all(0);
         }
+        console.printf("color: %f",color_sensor.get_hue());
         pros::delay(25);
 	}
 }
