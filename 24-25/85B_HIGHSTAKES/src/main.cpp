@@ -118,7 +118,6 @@ void blue_auton(){
     //auton
     chassis.setPose(53.625, 42.625, 55);
     chassis.follow(blueauton_txt,15,3000,false,false);
-    //chassis.moveToPoint(23,23,2000,{.forwards=false},false);
     clamp.extend();
     intake.move(127);
     pros::delay(500);
@@ -233,9 +232,14 @@ void autonomous() {
 int clampState = 1;
 int rolling = 0;
 
+void sort(){
+    if(color_sensor.get_hue()<=20 and color_sensor.get_hue()>=0){
+        console.print("Red Ring");
+    } else if(color_sensor.get_hue()<=230 and color_sensor.get_hue()>=200){
+        console.print("Blue Ring");
+    }
+}
 
-pros::vision_signature_s_t red_ring = pros::Vision::signature_from_utility(1, 9137, 14497, 11818, -1725, -441, -1084, 3.000, 0);
-pros::vision_signature_s_t blue_ring = pros::Vision::signature_from_utility(2, -4309, -3055, -3682, 6115, 10307, 8210, 3.000, 0); 
 void ring(){
     int rolling=0;
     while(true){
