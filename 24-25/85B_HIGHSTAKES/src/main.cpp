@@ -117,7 +117,8 @@ void blue_auton(){
     Alliance=1;
     //auton
     chassis.setPose(53.625, 42.625, 55);
-    chassis.moveToPoint(23,23,2000,{.forwards=false},false);
+    chassis.follow(blueauton_txt,15,3000,false,false);
+    //chassis.moveToPoint(23,23,2000,{.forwards=false},false);
     clamp.extend();
     intake.move(127);
     pros::delay(500);
@@ -126,13 +127,13 @@ void blue_auton(){
     chassis.turnToHeading(270,1000,{},false);
     chassis.follow(blueauton2_txt,10,3000,true,false);
     chassis.follow(blueauton3_txt,10,3000,false,false);
-    //intake.move(0);
-    //chassis.turnToHeading(115,1000,{},false);
-    //lift.move_absolute(200,200);
-    //chassis.follow(blueauton4_txt,5,5000,true,false);
-    //chassis.turnToHeading(90,1000,{.direction=AngularDirection::CW_CLOCKWISE},false);
-    //hassis.follow(blueauton5_txt,10,2000,true,false);
-    //lift.move_absolute(110,200);
+    intake.move(0);
+    chassis.turnToHeading(155,1000,{},false);
+    lift.move_absolute(200,200);
+    chassis.follow(blueauton4_txt,10,3000,true,false);
+    chassis.turnToHeading(90,1000,{.direction=AngularDirection::CCW_COUNTERCLOCKWISE},false);
+    chassis.follow(blueauton5_txt,10,2000,true,false);
+    lift.move_absolute(110,200);
 }
 void skills(){
     pros::ADIPneumatics clamp('a',false,false);
