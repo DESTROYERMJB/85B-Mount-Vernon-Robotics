@@ -1,44 +1,51 @@
-27.313, 26.681, 68.688
-27.228, 27.173, 67.757
-27.143, 27.666, 66.813
-27.057, 28.159, 65.856
-26.972, 28.651, 64.885
-26.887, 29.144, 63.898
-26.802, 29.637, 62.897
-26.717, 30.129, 61.879
-26.632, 30.622, 60.844
-26.547, 31.115, 59.791
-26.461, 31.607, 58.72
-26.376, 32.1, 57.628
-26.291, 32.593, 56.515
-26.206, 33.086, 55.381
-26.121, 33.578, 54.222
-26.036, 34.071, 53.038
-25.95, 34.564, 51.827
-25.865, 35.056, 50.587
-25.78, 35.549, 49.315
-25.695, 36.042, 48.01
-25.61, 36.534, 46.669
-25.525, 37.027, 45.288
-25.44, 37.52, 43.863
-25.354, 38.013, 42.391
-25.269, 38.505, 40.866
-25.184, 38.998, 39.281
-25.099, 39.491, 37.63
-25.014, 39.983, 35.903
-24.929, 40.476, 34.088
-24.843, 40.969, 32.171
-24.758, 41.461, 30.133
-24.673, 41.954, 27.946
-24.588, 42.447, 25.573
-24.503, 42.939, 22.956
-24.418, 43.432, 20
+23, 23, 74.88
+23.033, 23.499, 74.027
+23.065, 23.998, 73.164
+23.098, 24.497, 72.291
+23.131, 24.996, 71.407
+23.164, 25.495, 70.512
+23.196, 25.994, 69.606
+23.229, 26.492, 68.688
+23.262, 26.991, 67.757
+23.295, 27.49, 66.813
+23.327, 27.989, 65.856
+23.36, 28.488, 64.885
+23.393, 28.987, 63.898
+23.425, 29.486, 62.897
+23.458, 29.985, 61.879
+23.491, 30.484, 60.844
+23.524, 30.983, 59.791
+23.556, 31.482, 58.72
+23.589, 31.981, 57.628
+23.622, 32.48, 56.515
+23.655, 32.979, 55.381
+23.687, 33.477, 54.222
+23.72, 33.976, 53.038
+23.753, 34.475, 51.827
+23.785, 34.974, 50.587
+23.818, 35.473, 49.315
+23.851, 35.972, 48.01
+23.884, 36.471, 46.669
+23.916, 36.97, 45.288
+23.949, 37.469, 43.863
+23.982, 37.968, 42.391
+24.015, 38.467, 40.866
+24.047, 38.966, 39.281
+24.08, 39.465, 37.63
+24.113, 39.964, 35.903
+24.145, 40.462, 34.088
+24.178, 40.961, 32.171
+24.211, 41.46, 30.133
+24.244, 41.959, 27.946
+24.276, 42.458, 25.573
+24.309, 42.957, 22.956
+24.342, 43.456, 20
 24.362, 43.756, 0
 24.362, 43.756, 0
-20.955, 63.464, 0
+25.671, 63.713, 0
 endData
 127
 100
 200
-27.313, 26.681, 25.837, 35.218, 25.837, 35.218, 24.362, 43.756
-#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":18,"robotHeight":18,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":0.5,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes","signature":"V5RC 2025 - High Stakes","origin":{"__type":"built-in"}},"coordinateSystem":"Path-Based Strict Coordinates"},"paths":[{"segments":[{"controls":[{"uid":"s6i0yJLIdk","x":27.31295784741558,"y":26.68051825539453,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"Y8W7VqFDFF","x":24.361573084650697,"y":43.75638723996278,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"kxTh3PKYjV"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"AptmVHDWVl","lock":false,"visible":true}]}
+23, 23, 23.681, 33.378, 23.681, 33.378, 24.362, 43.756
+#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":18,"robotHeight":18,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":0.5,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes","signature":"V5RC 2025 - High Stakes","origin":{"__type":"built-in"}},"coordinateSystem":"VEX Gaming Positioning System"},"paths":[{"segments":[{"controls":[{"uid":"s6i0yJLIdk","x":23,"y":23,"lock":false,"visible":true,"heading":5,"__type":"end-point"},{"uid":"Y8W7VqFDFF","x":24.361573084650697,"y":43.75638723996278,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"kxTh3PKYjV"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"AptmVHDWVl","lock":false,"visible":true}]}
