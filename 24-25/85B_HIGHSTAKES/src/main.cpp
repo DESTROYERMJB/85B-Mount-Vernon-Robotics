@@ -231,13 +231,16 @@ void autonomous() {
 //Task for scoring rings
 int clampState = 1;
 int rolling = 0;
-
-
-pros::vision_signature_s_t red_ring = pros::Vision::signature_from_utility(1, 9137, 14497, 11818, -1725, -441, -1084, 3.000, 0);
-pros::vision_signature_s_t blue_ring = pros::Vision::signature_from_utility(2, -4309, -3055, -3682, 6115, 10307, 8210, 3.000, 0); 
+//color sorter
+void sort(){
+    if(color_sensor.get_hue()<=20 and color_sensor.get_hue()>=0){
+    } else if(color_sensor.get_hue()<=230 and color_sensor.get_hue()>=200){
+    }
+}
 void ring(){
     int rolling=0;
     while(true){
+        //drives intake
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)==1 and rolling==0){
             intake.move(127);
             rolling=1;
@@ -252,8 +255,8 @@ void ring(){
             pros::delay(200);
         } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1){
             intake.move(127);
-            //pros::delay(200);
-
+            pros::delay(200);
+        //Lift mechanism
         } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)==1){
             lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
             lift.move_absolute(350,200);
@@ -321,11 +324,7 @@ void opcontrol() {
             lift.set_zero_position_all(0);
         }
         console.clear();
-        if(color_sensor.get_hue()<=20 and color_sensor.get_hue()>=0){
-            console.print("Red Ring");
-        } else if(color_sensor.get_hue()<=230 and color_sensor.get_hue()>=200){
-            console.print("Blue Ring");
-        }
+        console.printf("proximity: %f", color_sensor.get_proximity());
         pros::delay(25);
 	}
 }
