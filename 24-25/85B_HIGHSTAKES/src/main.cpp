@@ -325,6 +325,5 @@ void opcontrol() {
         }
         console.clear();
         console.printf("Proximity: %f \n Hue: %f", color_sensor.get_proximity(),color_sensor.get_hue());
-        pros::delay(20);
 	}
 }
