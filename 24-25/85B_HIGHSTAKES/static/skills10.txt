@@ -1,57 +1,39 @@
--48, -24, 79.806
--47.5, -24, 79.006
--47, -24, 78.198
--46.5, -24, 77.382
--46, -24, 76.557
--45.5, -24, 75.723
--45, -24, 74.88
--44.5, -24, 74.027
--44, -24, 73.164
--43.5, -24, 72.291
--43, -24, 71.407
--42.5, -24, 70.512
--42, -24, 69.606
--41.5, -24, 68.688
--41, -24, 67.757
--40.5, -24, 66.813
--40, -24, 65.856
--39.5, -24, 64.885
--39, -24, 63.898
--38.5, -24, 62.897
--38, -24, 61.879
--37.5, -24, 60.844
--37, -24, 59.791
--36.5, -24, 58.72
--36, -24, 57.628
--35.5, -24, 56.515
--35, -24, 55.381
--34.5, -24, 54.222
--34, -24, 53.038
--33.5, -24, 51.827
--33, -24, 50.587
--32.5, -24, 49.315
--32, -24, 48.01
--31.5, -24, 46.669
--31, -24, 45.288
--30.5, -24, 43.863
--30, -24, 42.391
--29.5, -24, 40.866
--29, -24, 39.281
--28.5, -24, 37.63
--28, -24, 35.903
--27.5, -24, 34.088
--27, -24, 32.171
--26.5, -24, 30.133
--26, -24, 27.946
--25.5, -24, 25.573
--25, -24, 22.956
--24.5, -24, 20
--24, -24, 0
--24, -24, 0
--4, -24, 0
+-53.874, 58.294, 63.898
+-53.386, 58.185, 62.897
+-52.898, 58.077, 61.879
+-52.41, 57.968, 60.844
+-51.922, 57.859, 59.791
+-51.434, 57.75, 58.72
+-50.946, 57.642, 57.628
+-50.458, 57.533, 56.515
+-49.97, 57.424, 55.381
+-49.482, 57.316, 54.222
+-48.994, 57.207, 53.038
+-48.506, 57.098, 51.827
+-48.018, 56.99, 50.587
+-47.529, 56.881, 49.315
+-47.041, 56.772, 48.01
+-46.553, 56.663, 46.669
+-46.065, 56.555, 45.288
+-45.577, 56.446, 43.863
+-45.089, 56.337, 42.391
+-44.601, 56.229, 40.866
+-44.113, 56.12, 39.281
+-43.625, 56.011, 37.63
+-43.137, 55.902, 35.903
+-42.649, 55.794, 34.088
+-42.161, 55.685, 32.171
+-41.673, 55.576, 30.133
+-41.185, 55.468, 27.946
+-40.697, 55.359, 25.573
+-40.209, 55.25, 22.956
+-39.721, 55.142, 20
+-39.413, 55.073, 0
+-39.413, 55.073, 0
+-19.891, 50.725, 0
 endData
 127
 100
 200
--48, -24, -36, -24, -36, -24, -24, -24
-#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":18,"robotHeight":18,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":0.5,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes (Skills)","signature":"V5RC 2025 - High Stakes (Skills)","origin":{"__type":"built-in"}},"coordinateSystem":"VEX Gaming Positioning System"},"paths":[{"segments":[{"controls":[{"uid":"sbAiCuo5su","x":-48,"y":-24,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"Fjze7yolLb","x":-24,"y":-24,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"6umlWpgYDp"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"D3CRE5P8nU","lock":false,"visible":true}]}
+-53.874, 58.294, -46.644, 56.684, -46.644, 56.684, -39.413, 55.073
+#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":18,"robotHeight":16,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":0.5,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes (Skills)","signature":"V5RC 2025 - High Stakes (Skills)","origin":{"__type":"built-in"}},"coordinateSystem":"VEX Gaming Positioning System"},"paths":[{"segments":[{"controls":[{"uid":"Ys80FDodjV","x":-53.874,"y":58.294,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"gnNbOnRssb","x":-39.413,"y":55.073,"lock":false,"visible":true,"heading":105,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"p4NxWY239W"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"D3CRE5P8nU","lock":false,"visible":true}]}
