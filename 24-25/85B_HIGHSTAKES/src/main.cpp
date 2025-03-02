@@ -34,6 +34,11 @@ ASSET(skills14_txt);
 ASSET(skills15_txt);
 ASSET(skills16_txt);
 ASSET(skills17_txt);
+ASSET(skills18_txt);
+ASSET(skills19_txt);
+ASSET(skills20_txt);
+ASSET(skills21_txt);
+ASSET(skills22_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::MotorGroup leftMotors({-18,-16,-20},pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({13,12,15},pros::MotorGearset::blue);
@@ -139,70 +144,111 @@ void blue_auton(){
     chassis.follow(blueauton5_txt,10,2000,true,false);
     lift.move_absolute(110,200);
 }
+
+// Programming Skills
 void skills(){
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=0;
-    //auton
-    chassis.setPose(-60.25,0,270);
-    chassis.follow(skills_txt,10,4000,false,false);
-    chassis.turnToHeading(180,1000,{},false);
-    chassis.follow(skills1_txt,10,4000,false,false);
-    clamp.extend();
-    pros::delay(200);
-    intake.move(127);
-    pros::delay(200);
-    chassis.turnToHeading(90,1000,{},false);
-    chassis.follow(skills2_txt,10,4000,true,false);
-    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
-    lift.move_absolute(350,200);
-    pros::delay(200);
-    chassis.turnToHeading(40,1000,{},false);
-    chassis.follow(skills3_txt,6,4000,true,false);
-    pros::delay(500);
-    chassis.turnToHeading(0,1000,{},false);
-    chassis.follow(skills4_txt,10,2000,true,false);
-    lift.move_absolute(160,200);
-    pros::delay(200);
-    chassis.follow(skills5_txt,10,2000,false,false);
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    chassis.turnToHeading(270,1000,{},false);
-    //after wallstakes
-    chassis.follow(skills6_txt,10,10000,true,false);
-    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
-    lift.brake();
-    pros::delay(200);
-    pros::delay(500);
-    chassis.follow(skills7_txt,10,5000,false,false);
-    chassis.turnToHeading(295,1000,{},false);
-    chassis.follow(skills8_txt,8,2000,true,false);
-    pros::delay(500);
-    chassis.turnToHeading(150,2000,{},false);
-    chassis.follow(skills9_txt,8,2000,false,false);
-    clamp.retract();
-    intake.move(-127);
-    pros::delay(200);
-    chassis.follow(skills10_txt,10,2000,true,false);
-    intake.move(127);
-    chassis.turnToHeading(0,1000,{},false);
-    chassis.follow(skills11_txt,20,5000,false,false);
-    clamp.extend();
-    chassis.turnToHeading(90,1000,{},false);
-    chassis.follow(skills12_txt,5,4000,true,false);
-    pros::delay(500);
-    chassis.turnToHeading(140,1000,{},false);
-    chassis.follow(skills13_txt,10,2000,true,false);
-    pros::delay(500);
-    lift.move_absolute(160,200);
-    chassis.turnToHeading(180,1000,{},false);
-    chassis.follow(skills14_txt,10,2000,true,false);
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    chassis.turnToHeading(90,1000,{},false);
-    //after wallstake 2
-    chassis.follow(skills15_txt,10,10000,true,false);
-    pros::delay(500);
-    chassis.follow(skills16_txt,10,5000,false,false);
-    chassis.turnToHeading(245,1000,{},false);
-    chassis.follow(skills17_txt,8,2000,true,false);
+    // Start
+    //1
+    chassis.setPose(-60.25,0,270); //Origin
+    chassis.follow(skills_txt,10,4000,false,false); //Move
+    // 2- Grab Clamp
+    chassis.turnToHeading(180,1000,{},false); //Rotate
+    chassis.follow(skills1_txt,10,4000,false,false); //Move
+    clamp.extend(); //Clamp
+    pros::delay(200); //Delay 
+    intake.move(127); //Start Intake (Forward)
+    pros::delay(200); //Delay
+    // 3
+    chassis.turnToHeading(90,1000,{},false); //Rotate
+    chassis.follow(skills2_txt,10,4000,true,false); //Move
+    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD); //Initalize Lift Motors
+    lift.move_absolute(350,200); //Rotate Lift Motors (Top Level)
+    pros::delay(200); //Delay
+    chassis.turnToHeading(40,1000,{},false); //Rotate
+    // 4
+    chassis.follow(skills3_txt,6,4000,true,false); //Move
+    pros::delay(500); //Delay
+    chassis.turnToHeading(0,1000,{},false); //Rotate
+    // 5- Wall Stake #1
+    chassis.follow(skills4_txt,10,2000,true,false); //Move
+    lift.move_absolute(160,200); //Rotate Lift Motors (Middle Level)
+    pros::delay(200); //Delay
+    // 6- Drop WS Mech
+    chassis.follow(skills5_txt,10,2000,false,false); //Move
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); //Release Motors
+    lift.brake(); //Release Motors
+    chassis.turnToHeading(270,1000,{},false); //Rotate
+    // 7
+    chassis.follow(skills6_txt,10,10000,true,false); //Move
+    // 8
+    chassis.follow(skills7_txt,10,5000,false,false); //Move
+    chassis.turnToHeading(315,1000,{},false); //Rotate
+    // 9
+    chassis.follow(skills8_txt,8,2000,true,false); //Move
+    pros::delay(500); //Delay
+    chassis.turnToHeading(150,2000,{},false); //Rotate
+    // 10 - Drop Mobile Goal #1
+    chassis.follow(skills9_txt,8,2000,false,false); //Move
+    clamp.retract(); //Clamp Up
+    intake.move(-127); //Move Intake Backwards
+    pros::delay(200); //Delay
+    // 11
+    chassis.follow(skills10_txt,10,2000,true,false); //Move
+    intake.move(127); //Intake Moving Fowards
+    chassis.turnToHeading(0,1000,{},false); //Move
+    // 12
+    chassis.follow(skills11_txt,20,5000,false,false); //Move
+
+
+    // 13- Start of Quarter 2
+    chassis.follow(skills12_txt,10,4000,false,false); //Move
+    clamp.extend(); //Clamp
+    pros::delay(200); //Delay 
+    intake.move(127); //Start Intake (Forward)
+    pros::delay(200); //Delay
+    // 3
+    chassis.turnToHeading(180,1000,{},false); //Rotate
+    chassis.follow(skills13_txt,10,4000,true,false); //Move
+    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD); //Initalize Lift Motors
+    lift.move_absolute(350,200); //Rotate Lift Motors (Top Level)
+    pros::delay(200); //Delay
+    chassis.turnToHeading(140,1000,{},false); //Rotate
+    // 4
+    chassis.follow(skills14_txt,6,4000,true,false); //Move
+    pros::delay(500); //Delay
+    chassis.turnToHeading(180,1000,{},false); //Rotate
+    // 5- Wall Stake #1
+    chassis.follow(skills15_txt,10,2000,true,false); //Move
+    lift.move_absolute(160,200); //Rotate Lift Motors (Middle Level)
+    pros::delay(200); //Delay
+    // 6- Drop WS Mech
+    chassis.follow(skills16_txt,10,2000,false,false); //Move
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); //Release Motors
+    lift.brake(); //Release Motors
+    chassis.turnToHeading(270,1000,{},false); //Rotate
+    // 7
+    chassis.follow(skills17_txt,10,10000,true,false); //Move
+    // 8
+    chassis.follow(skills18_txt,10,5000,false,false); //Move
+    chassis.turnToHeading(225,1000,{},false); //Rotate
+    // 9
+    chassis.follow(skills19_txt,8,2000,true,false); //Move
+    pros::delay(500); //Delay
+    chassis.turnToHeading(210,2000,{},false); //Rotate
+    // 10 - Drop Mobile Goal #1
+    chassis.follow(skills20_txt,8,2000,false,false); //Move
+    clamp.retract(); //Clamp Up
+    intake.move(-127); //Move Intake Backwards
+    pros::delay(200); //Delay
+    // 11
+    chassis.follow(skills21_txt,10,2000,true,false); //Move
+    intake.move(127); //Intake Moving Fowards
+    chassis.turnToHeading(90,1000,{},false); //Move
+    // 12
+    chassis.follow(skills22_txt,20,5000,false,false); //Move
+    
 }
 
 rd::Selector selector({
