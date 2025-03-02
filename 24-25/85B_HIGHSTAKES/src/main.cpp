@@ -31,6 +31,9 @@ ASSET(skills11_txt);
 ASSET(skills12_txt);
 ASSET(skills13_txt);
 ASSET(skills14_txt);
+ASSET(skills15_txt);
+ASSET(skills16_txt);
+ASSET(skills17_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::MotorGroup leftMotors({-18,-16,-20},pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({13,12,15},pros::MotorGearset::blue);
@@ -154,7 +157,7 @@ void skills(){
     lift.move_absolute(350,200);
     pros::delay(200);
     chassis.turnToHeading(40,1000,{},false);
-    chassis.follow(skills3_txt,10,4000,true,false);
+    chassis.follow(skills3_txt,6,4000,true,false);
     pros::delay(500);
     chassis.turnToHeading(0,1000,{},false);
     chassis.follow(skills4_txt,10,2000,true,false);
@@ -165,24 +168,43 @@ void skills(){
     chassis.turnToHeading(270,1000,{},false);
     //after wallstakes
     chassis.follow(skills6_txt,10,10000,true,false);
+    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+    lift.brake();
+    pros::delay(200);
     pros::delay(500);
     chassis.follow(skills7_txt,10,5000,false,false);
     chassis.turnToHeading(295,1000,{},false);
-    chassis.follow(skills8_txt,10,2000,true,false);
+    chassis.follow(skills8_txt,8,2000,true,false);
     pros::delay(500);
-    chassis.turnToHeading(100,2000,{},false);
-    chassis.follow(skills9_txt,10,2000,false,false);
+    chassis.turnToHeading(150,2000,{},false);
+    chassis.follow(skills9_txt,8,2000,false,false);
     clamp.retract();
     intake.move(-127);
     pros::delay(200);
     chassis.follow(skills10_txt,10,2000,true,false);
     intake.move(127);
-    chassis.turnToHeading(5,1000,{},false);
-    chassis.follow(skills11_txt,10,5000,false,false);
+    chassis.turnToHeading(0,1000,{},false);
+    chassis.follow(skills11_txt,20,5000,false,false);
     clamp.extend();
-    //chassis.turnToHeading(90,1000,{},false);
-    //chassis.follow(skills12_txt,10,2000,true,false);
+    chassis.turnToHeading(90,1000,{},false);
+    chassis.follow(skills12_txt,5,4000,true,false);
+    pros::delay(500);
+    chassis.turnToHeading(140,1000,{},false);
+    chassis.follow(skills13_txt,10,2000,true,false);
+    pros::delay(500);
+    lift.move_absolute(160,200);
+    chassis.turnToHeading(180,1000,{},false);
+    chassis.follow(skills14_txt,10,2000,true,false);
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    chassis.turnToHeading(90,1000,{},false);
+    //after wallstake 2
+    chassis.follow(skills15_txt,10,10000,true,false);
+    pros::delay(500);
+    chassis.follow(skills16_txt,10,5000,false,false);
+    chassis.turnToHeading(245,1000,{},false);
+    chassis.follow(skills17_txt,8,2000,true,false);
 }
+
 rd::Selector selector({
     {"Red auto", red_auton},
     {"Blue auto", blue_auton},
