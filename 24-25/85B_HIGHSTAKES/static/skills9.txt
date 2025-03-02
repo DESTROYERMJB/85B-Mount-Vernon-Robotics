@@ -1,39 +1,49 @@
--39.413, 55.073, 63.898
--39.901, 55.182, 62.897
--40.389, 55.29, 61.879
--40.877, 55.399, 60.844
--41.365, 55.508, 59.791
--41.853, 55.617, 58.72
--42.341, 55.725, 57.628
--42.829, 55.834, 56.515
--43.317, 55.943, 55.381
--43.805, 56.051, 54.222
--44.293, 56.16, 53.038
--44.781, 56.269, 51.827
--45.269, 56.377, 50.587
--45.758, 56.486, 49.315
--46.246, 56.595, 48.01
--46.734, 56.704, 46.669
--47.222, 56.812, 45.288
--47.71, 56.921, 43.863
--48.198, 57.03, 42.391
--48.686, 57.138, 40.866
--49.174, 57.247, 39.281
--49.662, 57.356, 37.63
--50.15, 57.465, 35.903
--50.638, 57.573, 34.088
--51.126, 57.682, 32.171
--51.614, 57.791, 30.133
--52.102, 57.899, 27.946
--52.59, 58.008, 25.573
--53.078, 58.117, 22.956
--53.566, 58.225, 20
--53.874, 58.294, 0
--53.874, 58.294, 0
--73.396, 62.642, 0
+-39.413, 55.073, 73.164
+-39.905, 55.162, 72.291
+-40.397, 55.252, 71.407
+-40.889, 55.341, 70.512
+-41.381, 55.43, 69.606
+-41.873, 55.52, 68.688
+-42.365, 55.609, 67.757
+-42.857, 55.698, 66.813
+-43.349, 55.787, 65.856
+-43.841, 55.877, 64.885
+-44.333, 55.966, 63.898
+-44.825, 56.055, 62.897
+-45.317, 56.145, 61.879
+-45.808, 56.234, 60.844
+-46.3, 56.323, 59.791
+-46.792, 56.413, 58.72
+-47.284, 56.502, 57.628
+-47.776, 56.591, 56.515
+-48.268, 56.68, 55.381
+-48.76, 56.77, 54.222
+-49.252, 56.859, 53.038
+-49.744, 56.948, 51.827
+-50.236, 57.038, 50.587
+-50.728, 57.127, 49.315
+-51.22, 57.216, 48.01
+-51.712, 57.306, 46.669
+-52.204, 57.395, 45.288
+-52.696, 57.484, 43.863
+-53.188, 57.573, 42.391
+-53.68, 57.663, 40.866
+-54.172, 57.752, 39.281
+-54.664, 57.841, 37.63
+-55.156, 57.931, 35.903
+-55.648, 58.02, 34.088
+-56.14, 58.109, 32.171
+-56.632, 58.199, 30.133
+-57.124, 58.288, 27.946
+-57.616, 58.377, 25.573
+-58.107, 58.466, 22.956
+-58.599, 58.556, 20
+-58.81, 58.594, 0
+-58.81, 58.594, 0
+-78.488, 62.166, 0
 endData
 127
 100
 200
--39.413, 55.073, -46.644, 56.684, -46.644, 56.684, -53.874, 58.294
-#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":18,"robotHeight":16,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":0.5,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes (Skills)","signature":"V5RC 2025 - High Stakes (Skills)","origin":{"__type":"built-in"}},"coordinateSystem":"VEX Gaming Positioning System"},"paths":[{"segments":[{"controls":[{"uid":"gnNbOnRssb","x":-39.413,"y":55.073,"lock":false,"visible":true,"heading":105,"__type":"end-point"},{"uid":"Ys80FDodjV","x":-53.874,"y":58.294,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"qOPalsLskM"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"D3CRE5P8nU","lock":false,"visible":true}]}
+-39.413, 55.073, -49.111, 56.834, -49.111, 56.834, -58.81, 58.594
+#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":18,"robotHeight":16,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":0.5,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes (Skills)","signature":"V5RC 2025 - High Stakes (Skills)","origin":{"__type":"built-in"}},"coordinateSystem":"VEX Gaming Positioning System"},"paths":[{"segments":[{"controls":[{"uid":"gnNbOnRssb","x":-39.413,"y":55.073,"lock":false,"visible":true,"heading":105,"__type":"end-point"},{"uid":"Ys80FDodjV","x":-58.81,"y":58.594,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"qOPalsLskM"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"D3CRE5P8nU","lock":false,"visible":true}]}
