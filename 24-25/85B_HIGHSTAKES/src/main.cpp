@@ -139,6 +139,8 @@ void blue_auton(){
     chassis.follow(blueauton5_txt,10,2000,true,false);
     lift.move_absolute(110,200);
 }
+
+// Programming Skills
 void skills(){
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=0;
@@ -202,6 +204,7 @@ void skills(){
     //chassis.follow(skills14_txt,10,2000,true,false);
     //chassis.turnToHeading(180,1000,{},false)
 }
+
 rd::Selector selector({
     {"Red auto", red_auton},
     {"Blue auto", blue_auton},
