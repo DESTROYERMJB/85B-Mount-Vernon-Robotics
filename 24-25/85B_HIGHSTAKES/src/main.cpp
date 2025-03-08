@@ -31,7 +31,9 @@ ASSET(skills11_txt);
 ASSET(skills12_txt);
 ASSET(skills13_txt);
 ASSET(skills14_txt);
+ASSET(skills15_txt);
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
+pros::Controller skillscontroller(pros::E_CONTROLLER_PARTNER);
 pros::MotorGroup leftMotors({-18,-16,-20},pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({13,12,15},pros::MotorGearset::blue);
 pros::MotorGroup lift({-11,10},pros::MotorGearset::green);
@@ -86,6 +88,7 @@ lemlib::Chassis chassis(drivetrain, // drivetrain settings
                         angular_controller, // angular PID settings
                         sensors // odometry sensors
 );
+rd::Console console;
 //auton task
 //auton variable 0=red 1=blue
 int Alliance = 0;
@@ -140,48 +143,64 @@ void skills(){
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=0;
     //auton
-    chassis.setPose(-60.25,0,270);
+    chassis.setPose(-50,0,270);
+    lift.move_absolute(230,100);
+    pros::delay(1500);
+    chassis.moveToPose(-56.5,0,270,2000,{},false);
+    lift.move_absolute(20,100);
     chassis.follow(skills_txt,10,4000,false,false);
+    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
     chassis.turnToHeading(180,1000,{},false);
     chassis.follow(skills1_txt,10,4000,false,false);
+    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
     clamp.extend();
     pros::delay(200);
     intake.move(127);
     pros::delay(200);
     chassis.turnToHeading(90,1000,{},false);
-    chassis.follow(skills2_txt,10,4000,true,false);
+    chassis.follow(skills2_txt,10,5000,true,false);
     lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
     lift.move_absolute(350,200);
     pros::delay(200);
-    chassis.turnToHeading(40,1000,{},false);
-    chassis.follow(skills3_txt,10,4000,true,false);
-    pros::delay(500);
+    chassis.turnToHeading(55,1000,{},false);
+    chassis.follow(skills3_txt,10,9000,true,false);
     chassis.turnToHeading(0,1000,{},false);
-    chassis.follow(skills4_txt,10,2000,true,false);
+    chassis.follow(skills4_txt,10,3000,true,false);
     lift.move_absolute(160,200);
     pros::delay(200);
-    chassis.follow(skills5_txt,10,2000,false,false);
+    chassis.follow(skills5_txt,10,3000,false,false);
     lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     chassis.turnToHeading(270,1000,{},false);
     //after wallstakes
-    chassis.follow(skills6_txt,10,10000,true,false);
-    pros::delay(500);
-    chassis.follow(skills7_txt,10,5000,false,false);
+    chassis.follow(skills6_txt,10,7000,true,false);
+    chassis.setPose(-61,46,270);
+    pros::delay(700);
+    chassis.follow(skills7_txt,10,6000,false,false);
     chassis.turnToHeading(295,1000,{},false);
-    chassis.follow(skills8_txt,10,2000,true,false);
-    pros::delay(500);
-    chassis.turnToHeading(100,2000,{},false);
-    chassis.follow(skills9_txt,10,2000,false,false);
+    chassis.follow(skills8_txt,10,8000,true,false);
+    pros::delay(1000);
+    chassis.turnToHeading(100,3000,{},false);
+    lemlib::Pose pose = chassis.getPose();
+    console.printf("X: %f, Y: %f, Theata: %f", pose.x, pose.y,pose.theta);
+    chassis.follow(skills9_txt,10,5000,false,false);
+    console.printf("X: %f, Y: %f, Theata: %f", pose.x, pose.y,pose.theta);
     clamp.retract();
     intake.move(-127);
-    pros::delay(200);
-    chassis.follow(skills10_txt,10,2000,true,false);
-    intake.move(127);
-    chassis.turnToHeading(5,1000,{},false);
-    chassis.follow(skills11_txt,10,5000,false,false);
+    pros::delay(2000);
+    chassis.follow(skills10_txt,10,3000,true,false);
+    chassis.turnToHeading(15,2000,{},false);
+    chassis.follow(skills11_txt,10,6000,false,false);
+    chassis.turnToHeading(0,1000,{},false);
+    chassis.follow(skills12_txt,10,3000,false,false);
     clamp.extend();
-    //chassis.turnToHeading(90,1000,{},false);
-    //chassis.follow(skills12_txt,10,2000,true,false);
+    pros::delay(200);
+    chassis.turnToHeading(90,1000,{},false);
+    intake.move(127);
+    chassis.moveToPose(-24,-24,90,3000,{},false);
+    chassis.turnToHeading(125,1000,{},false);
+    console.printf("X: %f, Y: %f, Theata: %f", pose.x, pose.y,pose.theta);
+    //chassis.follow(skills14_txt,10,2000,true,false);
+    //chassis.turnToHeading(180,1000,{},false)
 }
 rd::Selector selector({
     {"Red auto", red_auton},
@@ -196,8 +215,8 @@ rd::Selector selector({
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-rd::Console console;
 void initialize() {
+    selector.focus();
     pros::Controller master(pros::E_CONTROLLER_MASTER);
     chassis.calibrate(); // calibrate sensors
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
@@ -245,7 +264,9 @@ int clampState = 1;
 int rolling = 0;
 
 void redirect(){
-    intake.move(80);
+    controller.rumble("----");
+    pros::delay(200);
+    intake.move(127);
     if(Alliance==0){
         while(color_sensor.get_hue()>30){
             if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1){
@@ -255,21 +276,21 @@ void redirect(){
             }
             pros::delay(15);
         }
-        intake.move_relative(50,50);
+        intake.move_relative(400,80);
         pros::delay(200);
-        intake.move_relative(-500,50);
+        intake.move_relative(-1000,100);
     }else{
         while(color_sensor.get_hue()>230 and color_sensor.get_hue()<200){
             if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)==1){
-                return;
                 intake.move(127);
                 rolling=1;
+                return;
             }
             pros::delay(15);
         }
-        intake.move_relative(50,50);
+        intake.move_relative(400,80);
         pros::delay(200);
-        intake.move_relative(-500,50);
+        intake.move_relative(-1000,100);
     }
     pros::delay(3000);
     intake.move(127);
@@ -283,7 +304,7 @@ void ring(){
             intake.move(127);
             rolling=1;
             pros::delay(200);
-        }else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)==1 and rolling==0){
+        }else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)==1){
             intake.move(-127);
             rolling=1;
             pros::delay(200);
@@ -352,20 +373,16 @@ void opcontrol() {
     pros::Task ringTask(ring);
     pros::Task clampTask(ClampF);
     color_sensor.set_led_pwm(100);
-    //color_sensor.disable_gesture();
+    int leftY = 0;
+    int rightY = 0;
 	while (true) {
-		int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
         chassis.tank(leftY,rightY);
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)==1){
             lift.set_zero_position_all(0);
         }
         console.clear();
-        //if(color_sensor.get_hue()<=20 and color_sensor.get_hue()>=0){
-        //    console.print("Red Ring");
-        //} else if(color_sensor.get_hue()<=230 and color_sensor.get_hue()>=200){
-        //    console.print("Blue Ring");
-        //}
         console.printf("prox: %d",color_sensor.get_proximity());
         pros::delay(25);
 	}
