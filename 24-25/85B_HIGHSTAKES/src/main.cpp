@@ -108,13 +108,13 @@ void red_auton(){
     chassis.turnToHeading(90,1000,{},false);
     chassis.follow(redauton2_txt,10,3000,true,false);
     chassis.follow(redauton3_txt,10,3000,false,false);
-    //intake.move(0);
-    //chassis.turnToHeading(245,1000,{},false);
-    //lift.move_absolute(200,200);
-    //chassis.follow(redauton4_txt,5,5000,true,false);
-    //chassis.turnToHeading(270,1000,{.direction=AngularDirection::CCW_COUNTERCLOCKWISE},false);
-    //chassis.follow(redauton5_txt,10,2000,true,false);
-    //lift.move_absolute(110,200);
+    intake.move(0);
+    chassis.turnToHeading(245,1000,{},false);
+    lift.move_absolute(200,200);
+    chassis.follow(redauton4_txt,5,5000,true,false);
+    chassis.turnToHeading(270,1000,{.direction=AngularDirection::CCW_COUNTERCLOCKWISE},false);
+    chassis.follow(redauton5_txt,10,2000,true,false);
+    lift.move_absolute(110,200);
 }
 void blue_auton(){
     match=true;
@@ -142,69 +142,75 @@ void blue_auton(){
 
 // Programming Skills
 void skills(){
+    lift.set_zero_position_all(0);
+    color_sensor.set_led_pwm(100);
     pros::ADIPneumatics clamp('a',false,false);
     Alliance=0;
     //auton
-    chassis.setPose(-50,0,270);
-    lift.move_absolute(230,100);
+    chassis.setPose(-52,0,270);
+    lift.move_absolute(230,200);
     pros::delay(1500);
     chassis.moveToPose(-56.5,0,270,2000,{},false);
-    lift.move_absolute(20,100);
-    chassis.follow(skills_txt,10,4000,false,false);
-    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+    lift.move(-127);
+    pros::delay(400);
+    chassis.moveToPose(-48,0,270,2000,{.forwards=false},false);
     chassis.turnToHeading(180,1000,{},false);
+    lift.move(0);
     chassis.follow(skills1_txt,10,4000,false,false);
-    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
     clamp.extend();
     pros::delay(200);
     intake.move(127);
     pros::delay(200);
     chassis.turnToHeading(90,1000,{},false);
-    chassis.follow(skills2_txt,10,5000,true,false);
+    chassis.follow(skills2_txt,10,5000,true,true);
     lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
-    lift.move_absolute(350,200);
+    lift.move_absolute(300,200);
     pros::delay(200);
+    chassis.waitUntilDone();
     chassis.turnToHeading(55,1000,{},false);
     chassis.follow(skills3_txt,10,9000,true,false);
     chassis.turnToHeading(0,1000,{},false);
-    chassis.follow(skills4_txt,10,3000,true,false);
-    lift.move_absolute(160,200);
-    pros::delay(200);
+    chassis.follow(skills4_txt,10,1700,true,false);
+    lift.move_relative(-100,200);
+    pros::delay(400);
     chassis.follow(skills5_txt,10,3000,false,false);
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     chassis.turnToHeading(270,1000,{},false);
     //after wallstakes
-    chassis.follow(skills6_txt,10,7000,true,false);
+    chassis.follow(skills6_txt,10,4400,true,false);
     chassis.setPose(-61,46,270);
-    pros::delay(700);
     chassis.follow(skills7_txt,10,6000,false,false);
+    lift.move_absolute(0,100);
     chassis.turnToHeading(295,1000,{},false);
     chassis.follow(skills8_txt,10,8000,true,false);
-    pros::delay(1000);
-    chassis.turnToHeading(100,3000,{},false);
-    lemlib::Pose pose = chassis.getPose();
-    console.printf("X: %f, Y: %f, Theata: %f", pose.x, pose.y,pose.theta);
-    chassis.follow(skills9_txt,10,5000,false,false);
-    console.printf("X: %f, Y: %f, Theata: %f", pose.x, pose.y,pose.theta);
+    pros::delay(500);
+    chassis.turnToHeading(100,1000,{},false);
+    chassis.moveToPose(-60,60,100,3000,{.forwards=false},false);
     clamp.retract();
     intake.move(-127);
-    pros::delay(2000);
+    pros::delay(200);
     chassis.follow(skills10_txt,10,3000,true,false);
     chassis.turnToHeading(15,2000,{},false);
     chassis.follow(skills11_txt,10,6000,false,false);
     chassis.turnToHeading(0,1000,{},false);
-    chassis.follow(skills12_txt,10,3000,false,false);
+    chassis.follow(skills12_txt,10,2500,false,false);
     clamp.extend();
     pros::delay(200);
-    chassis.turnToHeading(90,1000,{},false);
+    chassis.turnToHeading(180,1000,{},false);
     intake.move(127);
-    chassis.moveToPose(-24,-24,90,3000,{},false);
-    chassis.turnToHeading(125,1000,{},false);
-    console.printf("X: %f, Y: %f, Theata: %f", pose.x, pose.y,pose.theta);
-    //chassis.follow(skills14_txt,10,2000,true,false);
-    //chassis.turnToHeading(180,1000,{},false)
+    chassis.moveToPose(-48,-61,180,3000,{},false);
+    chassis.setPose(-46.5,-61,180);
+    chassis.moveToPose(-48,-24,180,5000,{.forwards=false},false);
+    chassis.turnToPoint(-24,-24,1000,{},false);
+    chassis.moveToPose(-24,-24,90,2000,{},true);
+    chassis.turnToPoint(-24,-48,1000,{},false);
+    chassis.moveToPose(-24,-48,180,2000,{},false);
+    chassis.turnToPoint(-50,-48,1000,{},false);
+    chassis.moveToPose(-60,-48,270,2000,{},false);
+    chassis.turnToHeading(0,1000,{},false);
+    clamp.retract();
+    rightMotors.move(-127);
+    leftMotors.move(-127);
 }
-
 rd::Selector selector({
     {"Red auto", red_auton},
     {"Blue auto", blue_auton},
@@ -300,6 +306,7 @@ void redirect(){
 }
 
 void ring(){
+    lift.set_zero_position_all(0);
     int rolling=0;
     intake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     while(true){
@@ -378,6 +385,17 @@ void opcontrol() {
     color_sensor.set_led_pwm(100);
     int leftY = 0;
     int rightY = 0;
+    if(!match){
+        chassis.setPose(-52,0,270);
+        lift.move_absolute(230,100);
+        pros::delay(1500);
+        chassis.moveToPose(-56.5,0,270,2000,{},false);
+        lift.move(-127);
+        pros::delay(400);
+        chassis.moveToPose(-48,0,270,2000,{.forwards=false},false);
+        lift.move(0);
+        chassis.turnToPoint(-48,-24,1000,{.forwards=false},false);
+    }
 	while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
