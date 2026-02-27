@@ -2,10 +2,8 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
-#include "liblvgl/llemu.hpp"
 #include "pros/abstract_motor.hpp"
 #include "pros/adi.hpp"
-#include "pros/llemu.hpp"
 #include "pros/misc.h"
 #include "pros/motor_group.hpp"
 #include "pros/motors.h"
@@ -92,7 +90,7 @@ lemlib::Chassis chassis(drivetrain, // drivetrain settings
  */
 
 void initialize() {
-    pros::lcd::initialize();
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     chassis.calibrate();
     Lintake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     Uintake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -128,8 +126,8 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-
-void autonomous() {
+void skills() {
+    //startup
     pros::adi::Pneumatics Scraper('a',false);
     pros::adi::Pneumatics Flap('b',false);
     Lintake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
@@ -137,29 +135,76 @@ void autonomous() {
     Outake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     upper.set_led_pwm(100);
     upper.disable_gesture();
-    /**
-    horizontal_encoder.reset();
-    chassis.setPose(0,0,0);
-    chassis.turnToHeading(90, 1000,{},false);
-    pros::lcd::print(3, "ADI Encoder: %i", horizontal_encoder.get_position());
-    pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-    pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-    pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-    */
+    chassis.setPose(-48.75,-7.5,180);
 
-
-    /**
-    chassis.setPose(-48.5,-7.5,180);
-    chassis.moveToPose(-48.5, -48, 180, 4000,{},false);
-    int x = chassis.getPose().x;
-    int y = chassis.getPose().y;
+    // start of auton
+    chassis.setPose(-48.75,-7.5,180);
+    chassis.moveToPose(-48.75, -48, 180, 4000,{},false);
     chassis.turnToHeading(270, 2000,{},false);
     Scraper.extend();
     Lintake.move(127);
     Uintake.move(127);
     Outake.move(127);
     pros::delay(650);
-    chassis.setPose(x,y,chassis.getPose().theta);
+    chassis.moveToPose(-62, -48, 270, 2000,{.maxSpeed=70},false);
+    pros::delay(4000);
+
+    // retracts from loader
+    chassis.moveToPose(-48, -48,270, 2000,{.forwards=false},false);
+    Scraper.retract();
+    chassis.turnToHeading(150, 1000);
+    chassis.moveToPose(-24,-60,90,2000,{},false);
+    chassis.turnToHeading(90, 1000, {} , false);
+    chassis.moveToPose(24, -60, 90, 3000, {}, false);
+    chassis.turnToHeading(60, 1000);
+    chassis.moveToPoint(48, -47.5, 3000);
+    chassis.turnToHeading(90, 1000);
+    chassis.moveToPose(20, -47.5, 90, 2000, {.forwards=false}, false);
+    chassis.setPose(31.5,-47,chassis.getPose().theta,false);
+    Flap.extend();
+    pros::delay(1950);
+    chassis.moveToPose(48, -47,90, 2000,{},false);
+    Flap.retract();
+    Scraper.extend();
+    pros::delay(750);
+    chassis.moveToPose(62, -47, 90, 2000,{.maxSpeed=70},false);
+    pros::delay(4000);
+    chassis.moveToPose(31.5, -47, 90, 2000, {.forwards=false}, true);
+    Scraper.retract();
+    chassis.waitUntilDone();
+    Flap.extend();
+    pros::delay(1950);
+    chassis.moveToPoint(48, -47, 1000, {.minSpeed=50,.earlyExitRange=5},false);
+    Flap.retract();
+    chassis.moveToPoint(36, 24, 3000, {.minSpeed=50,.earlyExitRange=8},false);
+    chassis.moveToPoint(48, 48, 2000,{},false);
+    chassis.turnToHeading(90, 1000,{},false);
+    Scraper.extend();
+    pros::delay(650);
+    chassis.moveToPose(62, 48, 90, 2000,{.maxSpeed=70},false);
+    pros::delay(4000);
+    chassis.moveToPose(48, 48,90, 2000,{.forwards=false},false);
+}
+
+void RightAuton(){
+    //startup
+    pros::adi::Pneumatics Scraper('a',false);
+    pros::adi::Pneumatics Flap('b',false);
+    Lintake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    Uintake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    Outake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    upper.set_led_pwm(100);
+    upper.disable_gesture();
+    chassis.setPose(-48.5,-7.5,180);
+
+
+    chassis.moveToPose(-48.5, -48, 180, 4000,{},false);
+    chassis.turnToHeading(270, 2000,{},false);
+    Scraper.extend();
+    Lintake.move(127);
+    Uintake.move(127);
+    Outake.move(127);
+    pros::delay(650);
     chassis.moveToPose(-62, -48, 270, 2000,{.minSpeed=100},false);
     pros::delay(4000);
     chassis.moveToPose(-30, -48,270, 3000,{.forwards=false});
@@ -181,21 +226,26 @@ void autonomous() {
     RD.move_relative(-600, 600);
     LD.move_relative(-600, 600);
     //hola yo soy dora 
+}
 
-    //*/
-
-    /** 
+void LeftAuton(){
+    pros::adi::Pneumatics Scraper('a',false);
+    pros::adi::Pneumatics Flap('b',false);
+    Lintake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    Uintake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    Outake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    upper.set_led_pwm(100);
+    upper.disable_gesture();
     chassis.setPose(48.5,-7.5,180);
+
+
     chassis.moveToPose(48.5, -48, 180, 4000,{},false);
-    int x = chassis.getPose().x;
-    int y = chassis.getPose().y;
     chassis.turnToHeading(90, 2000,{},false);
     Scraper.extend();
     Lintake.move(127);
     Uintake.move(127);
     Outake.move(127);
     pros::delay(650);
-    chassis.setPose(x,y,chassis.getPose().theta);
     chassis.moveToPose(62, -48, 90, 2000,{.minSpeed=127},false);
     pros::delay(4000);
     chassis.moveToPose(30, -48,90, 3000,{.forwards=false});
@@ -216,36 +266,10 @@ void autonomous() {
     Flap.retract();
     RD.move_relative(-600, 600);
     LD.move_relative(-600, 600);
+}
 
-    //*/
-
-    //*
-    chassis.setPose(-53.25, -13.75, 180);
-    
-    chassis.follow(skills1copy_txt,15,2000,true,false);
-    pros::lcd::print(1, "Done");
-    /*
-    Lintake.move(0);
-    chassis.turnToHeading(198,1000,{.direction = lemlib::AngularDirection::CCW_COUNTERCLOCKWISE},false);
-    Scraper.extend();
-    chassis.follow(skills2_txt,10,2000,true,true);
-    Lintake.move(127);
-    pros::delay(2000);
-    chassis.moveToPose(-31,47,90,2000,{.forwards=false});
-    Scraper.retract();
-    chassis.waitUntilDone();
-    Flap.extend();
-    while (!((upper.get_hue() >= 150 && upper.get_hue() <= 270) && (upper.get_proximity() > 100))){
-        pros::delay(20);
-    }
-    Uintake.move_relative(-540, 200);
-    Lintake.move_relative(-540, 200);
-    pros::delay(500);
-    Uintake.move(127);
-    Lintake.move(127);    
-
-
-    //*/
+void autonomous() {
+    skills();
 }
 
 /**
@@ -314,7 +338,6 @@ void opcontrol() {
 		// get left y and right y positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
-        pros::lcd::print(1,"Proximity: %d",upper.get_proximity());
         
         // move the robot
         chassis.tank(leftY, rightY);
