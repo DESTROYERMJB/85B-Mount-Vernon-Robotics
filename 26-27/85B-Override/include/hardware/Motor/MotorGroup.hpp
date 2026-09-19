@@ -9,6 +9,18 @@
 
 namespace lemlib {
 /**
+ * @brief the V5 motor cartridge (internal gearset) installed in a motor
+ */
+enum class Cartridge {
+    /** 36:1, 100 rpm */
+    RED,
+    /** 18:1, 200 rpm */
+    GREEN,
+    /** 6:1, 600 rpm */
+    BLUE
+};
+
+/**
  * @brief MotorGroup class
  *
  * This class is a handler for a group of lemlib::Motor objects, which themselves are wrappers for ther pros::Motor
@@ -27,18 +39,18 @@ class MotorGroup : public Encoder {
          * @brief Construct a new Motor Group
          *
          * @param ports list of ports of the motors in the group
-         * @param outputVelocity the theoretical maximum output velocity of the motor group, after gearing
+         * @param cartridge the cartridge installed in every motor of the group
          *
          * @b Example:
          * @code {.cpp}
          * void initialize() {
-         *     // motor group with motors on ports 1, -2, and 3
-         *     // max theoretical output is 360 rpm
-         *     lemlib::MotorGroup motorGroup({1, -2, 3}, 360_rpm);
+         *     // motor group with motors on ports 1, -2, and 3, all with green (200 rpm) cartridges
+         *     lemlib::MotorGroup motorGroup({1, -2, 3}, lemlib::Cartridge::GREEN);
          * }
          * @endcode
          */
-        MotorGroup(const std::initializer_list<ReversibleSmartPort>& ports, AngularVelocity outputVelocity);
+        MotorGroup(const std::initializer_list<ReversibleSmartPort>& ports, Cartridge cartridge)
+            : MotorGroup(ports, cartridgeVelocity(cartridge)) {}
         /**
          * @brief MotorGroup copy constructor
          *
@@ -507,6 +519,18 @@ class MotorGroup : public Encoder {
          */
         void removeMotor(Motor motor);
     private:
+        static constexpr AngularVelocity cartridgeVelocity(Cartridge cartridge) {
+            switch (cartridge) {
+                case Cartridge::RED: return 100_rpm;
+                case Cartridge::GREEN: return 200_rpm;
+                case Cartridge::BLUE: return 600_rpm;
+            }
+            return 200_rpm;
+        }
+
+        // implemented in the hardware library; use the Cartridge constructor instead
+        MotorGroup(const std::initializer_list<ReversibleSmartPort>& ports, AngularVelocity outputVelocity);
+
         struct MotorInfo {
                 ReversibleSmartPort port;
                 bool connectedLastCycle;

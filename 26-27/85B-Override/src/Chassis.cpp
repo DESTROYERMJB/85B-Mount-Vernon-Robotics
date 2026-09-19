@@ -1,23 +1,50 @@
 #include "Chassis.hpp"
+#include "lemlib/config.hpp"
 #include "lemlib/MotionHandler.hpp"
 #include "lemlib/Timer.hpp"
 #include "lemlib/util.hpp"
 #include "pros/rtos.hpp"
+
+// lemlib/config.hpp globals: placeholders until the Chassis constructor fills them in from its settings
+lemlib::PID angular_pid(0, 0, 0);
+lemlib::PID lateral_pid(0, 0, 0);
+std::function<units::Pose()> pose_getter = [] { return units::Pose(); };
+lemlib::MotorGroup* left_motors = nullptr;
+lemlib::MotorGroup* right_motors = nullptr;
+lemlib::ExitConditionGroup<AngleRange> angular_exit_conditions({});
+lemlib::ExitConditionGroup<Length> lateral_exit_conditions({});
+Length track_width = 0_in;
+Number drift_compensation = 0;
+Number angular_slew = 0;
+Number lateral_slew = 0;
 
 namespace lemlib {
 
 // pros::Controller::get_analog's full range, used to scale raw joystick input to -1..+1
 static constexpr Number CONTROLLER_ANALOG_MAX = 127;
 
-Chassis::Chassis(OdomSensors sensors, Drivetrain drivetrain, DriveType defaultDriveType, DriveCurve throttleCurve,
-                 DriveCurve turnCurve)
-    : m_odom(sensors.imus, sensors.verticalWheels, sensors.horizontalWheels),
-      m_imus(sensors.imus),
-      m_leftMotors(drivetrain.leftMotors),
-      m_rightMotors(drivetrain.rightMotors),
+Chassis::Chassis(Drivetrain drivetrain, LateralController lateralController, AngularController angularController,
+                 OdomSensors sensors, DriveType defaultDriveType, DriveCurve throttleCurve, DriveCurve turnCurve)
+    : m_odom({&sensors.imu()}, {&sensors.verticalTrackingWheel()}, {&sensors.horizontalTrackingWheel()}),
+      m_imus({&sensors.imu()}),
+      m_drivetrain(drivetrain),
+      m_lateralController(lateralController),
+      m_angularController(angularController),
       m_defaultDriveType(defaultDriveType),
       m_throttleCurve(throttleCurve),
-      m_turnCurve(turnCurve) {}
+      m_turnCurve(turnCurve) {
+    left_motors = &m_drivetrain.leftMotors;
+    right_motors = &m_drivetrain.rightMotors;
+    angular_pid = angularController.pid();
+    lateral_pid = lateralController.pid();
+    pose_getter = [this] { return getPose(); };
+    angular_exit_conditions = angularController.exitConditions();
+    lateral_exit_conditions = lateralController.exitConditions();
+    track_width = drivetrain.trackWidth;
+    drift_compensation = drivetrain.horizontalDrift;
+    angular_slew = angularController.slew;
+    lateral_slew = lateralController.slew;
+}
 
 void Chassis::calibrate() {
     for (IMU* imu : m_imus) imu->calibrate();
@@ -37,45 +64,69 @@ void Chassis::calibrate() {
 
 units::Pose Chassis::getPose() { return m_odom.getPose(); }
 
-void Chassis::setPose(units::Pose pose) { m_odom.setPose(pose); }
+double Chassis::getX() { return unit_config::toLength(getPose().x); }
 
-void Chassis::turnTo(std::variant<Angle, units::V2Position> target, Time timeout, TurnToParams params, bool async,
-                     std::optional<uint32_t> priority) {
+double Chassis::getY() { return unit_config::toLength(getPose().y); }
+
+double Chassis::getHeading() { return unit_config::toHeading(getPose().orientation); }
+
+void Chassis::setPose(double x, double y, double heading) {
+    m_odom.setPose({unit_config::length(x), unit_config::length(y), unit_config::heading(heading)});
+}
+
+void Chassis::turnToHeading(double heading, double timeout, TurnToParams params, bool async,
+                            std::optional<uint32_t> priority) {
+    const std::variant<Angle, units::V2Position> target = unit_config::heading(heading);
+    const Time time = unit_config::time(timeout);
     if (async) {
-        motion_handler::move([target, timeout, params] { lemlib::turnTo(target, timeout, params, {}); }, priority);
+        motion_handler::move([target, time, params] { lemlib::turnTo(target, time, params, {}); }, priority);
     } else {
-        lemlib::turnTo(target, timeout, params, {});
+        lemlib::turnTo(target, time, params, {});
     }
 }
 
-void Chassis::moveToPoint(units::V2Position target, Time timeout, MoveToPointParams params, bool async,
+void Chassis::turnToPoint(double x, double y, double timeout, TurnToParams params, bool async,
                           std::optional<uint32_t> priority) {
+    const std::variant<Angle, units::V2Position> target = units::V2Position(unit_config::length(x), unit_config::length(y));
+    const Time time = unit_config::time(timeout);
     if (async) {
-        motion_handler::move([target, timeout, params] { lemlib::moveToPoint(target, timeout, params, {}); },
-                             priority);
+        motion_handler::move([target, time, params] { lemlib::turnTo(target, time, params, {}); }, priority);
     } else {
-        lemlib::moveToPoint(target, timeout, params, {});
+        lemlib::turnTo(target, time, params, {});
     }
 }
 
-void Chassis::moveToPose(units::Pose target, Time timeout, MoveToPoseParams params, bool async,
+void Chassis::moveToPoint(double x, double y, double timeout, MoveToPointParams params, bool async,
+                          std::optional<uint32_t> priority) {
+    const units::V2Position target(unit_config::length(x), unit_config::length(y));
+    const Time time = unit_config::time(timeout);
+    if (async) {
+        motion_handler::move([target, time, params] { lemlib::moveToPoint(target, time, params, {}); }, priority);
+    } else {
+        lemlib::moveToPoint(target, time, params, {});
+    }
+}
+
+void Chassis::moveToPose(double x, double y, double heading, double timeout, MoveToPoseParams params, bool async,
                          std::optional<uint32_t> priority) {
+    const units::Pose target(unit_config::length(x), unit_config::length(y), unit_config::heading(heading));
+    const Time time = unit_config::time(timeout);
     if (async) {
-        motion_handler::move([target, timeout, params] { lemlib::moveToPose(target, timeout, params, {}); },
-                             priority);
+        motion_handler::move([target, time, params] { lemlib::moveToPose(target, time, params, {}); }, priority);
     } else {
-        lemlib::moveToPose(target, timeout, params, {});
+        lemlib::moveToPose(target, time, params, {});
     }
 }
 
-void Chassis::follow(const asset& path, Length lookaheadDistance, Time timeout, FollowParams params, bool async,
+void Chassis::follow(const asset& path, double lookaheadDistance, double timeout, FollowParams params, bool async,
                      std::optional<uint32_t> priority) {
+    const Length lookahead = unit_config::length(lookaheadDistance);
+    const Time time = unit_config::time(timeout);
     if (async) {
-        motion_handler::move(
-            [path, lookaheadDistance, timeout, params] { lemlib::follow(path, lookaheadDistance, timeout, params, {}); },
-            priority);
+        motion_handler::move([path, lookahead, time, params] { lemlib::follow(path, lookahead, time, params, {}); },
+                             priority);
     } else {
-        lemlib::follow(path, lookaheadDistance, timeout, params, {});
+        lemlib::follow(path, lookahead, time, params, {});
     }
 }
 
@@ -90,8 +141,8 @@ void Chassis::waitUntilDone() {
 void Chassis::tank(Number left, Number right, bool disableDriveCurve) {
     const Number l = left / CONTROLLER_ANALOG_MAX;
     const Number r = right / CONTROLLER_ANALOG_MAX;
-    m_leftMotors.move(disableDriveCurve ? l : m_throttleCurve(l));
-    m_rightMotors.move(disableDriveCurve ? r : m_throttleCurve(r));
+    m_drivetrain.leftMotors.move(disableDriveCurve ? l : m_throttleCurve(l));
+    m_drivetrain.rightMotors.move(disableDriveCurve ? r : m_throttleCurve(r));
 }
 
 void Chassis::arcade(Number throttle, Number turn, bool disableDriveCurve) {
@@ -100,8 +151,8 @@ void Chassis::arcade(Number throttle, Number turn, bool disableDriveCurve) {
     const Number curvedThrottle = disableDriveCurve ? t : m_throttleCurve(t);
     const Number curvedTurn = disableDriveCurve ? s : m_turnCurve(s);
     const DriveOutputs outputs = desaturate(curvedThrottle, curvedTurn);
-    m_leftMotors.move(outputs.left);
-    m_rightMotors.move(outputs.right);
+    m_drivetrain.leftMotors.move(outputs.left);
+    m_drivetrain.rightMotors.move(outputs.right);
 }
 
 void Chassis::curvature(Number throttle, Number turn, bool disableDriveCurve) {
@@ -110,8 +161,8 @@ void Chassis::curvature(Number throttle, Number turn, bool disableDriveCurve) {
     const Number curvedThrottle = disableDriveCurve ? t : m_throttleCurve(t);
     const Number curvedTurn = disableDriveCurve ? s : m_turnCurve(s);
     const DriveOutputs outputs = desaturate(curvedThrottle, curvedTurn * units::abs(curvedThrottle));
-    m_leftMotors.move(outputs.left);
-    m_rightMotors.move(outputs.right);
+    m_drivetrain.leftMotors.move(outputs.left);
+    m_drivetrain.rightMotors.move(outputs.right);
 }
 
 void Chassis::driverControl(pros::Controller& controller, bool disableDriveCurve) {

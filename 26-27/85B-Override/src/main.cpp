@@ -13,10 +13,9 @@ void initialize() {
     chassis.calibrate();
     pros::Task([] {
         while (true) {
-            const units::Pose p = chassis.getPose();
-            pros::lcd::print(0, "X: %f", to_in(p.x));
-            pros::lcd::print(1, "Y: %f", to_in(p.y));
-            pros::lcd::print(2, "Theta: %f", to_cDeg(p.orientation));
+            pros::lcd::print(0, "X: %f", chassis.getX());
+            pros::lcd::print(1, "Y: %f", chassis.getY());
+            pros::lcd::print(2, "Theta: %f", chassis.getHeading());
             pros::delay(10);
         }
     });
@@ -26,8 +25,8 @@ void disabled() {}
 
 void autonomous() {
     // example motion, wire up the real routine here
-    chassis.turnTo(90_cDeg, 2_sec);
-    chassis.waitUntilDone();
+    chassis.setPose(0,0,90);
+    chassis.moveToPose(24, 24, 90, 2000); // x (in), y (in), heading (deg), timeout (ms)
 }
 
 void opcontrol() {

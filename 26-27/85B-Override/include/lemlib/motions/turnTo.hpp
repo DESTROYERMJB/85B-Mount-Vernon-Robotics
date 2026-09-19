@@ -48,9 +48,9 @@ struct TurnToSettings {
         /** this function should return the estimated pose of the robot, typically by the tracking wheel odometry. */
         std::function<units::Pose()> poseGetter = pose_getter;
         /** the left motor group of the drivetrain */
-        lemlib::MotorGroup& leftMotors = left_motors;
+        lemlib::MotorGroup& leftMotors = *left_motors;
         /** the right motor group of the drivetrain */
-        lemlib::MotorGroup& rightMotors = right_motors;
+        lemlib::MotorGroup& rightMotors = *right_motors;
 };
 
 /**

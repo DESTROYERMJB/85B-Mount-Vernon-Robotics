@@ -8,20 +8,23 @@
 #include "units/Pose.hpp"
 #include <functional>
 
-extern const lemlib::PID angular_pid;
-extern const lemlib::PID lateral_pid;
+// defined in Chassis.cpp and filled in by the lemlib::Chassis constructor
 
-extern const std::function<units::Pose()> pose_getter;
+extern lemlib::PID angular_pid;
+extern lemlib::PID lateral_pid;
 
-extern lemlib::MotorGroup left_motors;
-extern lemlib::MotorGroup right_motors;
+extern std::function<units::Pose()> pose_getter;
 
-extern const lemlib::ExitConditionGroup<AngleRange> angular_exit_conditions;
-extern const lemlib::ExitConditionGroup<Length> lateral_exit_conditions;
+// the drivetrain's motor groups, owned by the Chassis's Drivetrain
+extern lemlib::MotorGroup* left_motors;
+extern lemlib::MotorGroup* right_motors;
 
-extern const Length track_width;
+extern lemlib::ExitConditionGroup<AngleRange> angular_exit_conditions;
+extern lemlib::ExitConditionGroup<Length> lateral_exit_conditions;
 
-extern const Number drift_compensation;
+extern Length track_width;
 
-extern const Number angular_slew;
-extern const Number lateral_slew;
+extern Number drift_compensation;
+
+extern Number angular_slew;
+extern Number lateral_slew;
