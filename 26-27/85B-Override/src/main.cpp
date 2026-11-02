@@ -1,7 +1,6 @@
 #include "main.h"
 #include "lemlog/logger/sinks/terminal.hpp"
 #include "pros/llemu.hpp"
-#include "pros/misc.hpp"
 #include "robot.hpp"
 
 logger::Terminal terminal;
@@ -9,16 +8,8 @@ logger::Terminal terminal;
 void initialize() {
     terminal.setLoggingLevel(logger::Level::DEBUG);
     pros::lcd::initialize();
-
+    lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
     chassis.calibrate();
-    pros::Task([] {
-        while (true) {
-            pros::lcd::print(0, "X: %f", chassis.getX());
-            pros::lcd::print(1, "Y: %f", chassis.getY());
-            pros::lcd::print(2, "Theta: %f", chassis.getHeading());
-            pros::delay(10);
-        }
-    });
 }
 
 void disabled() {}
@@ -30,8 +21,14 @@ void autonomous() {
 }
 
 void opcontrol() {
-    pros::Controller master(pros::E_CONTROLLER_MASTER);
     while (true) {
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+            lift.move(127);
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+            lift.move(-127);
+        } else {
+            lift.move(0);
+        }
         chassis.driverControl(master);
         pros::delay(10);
     }
