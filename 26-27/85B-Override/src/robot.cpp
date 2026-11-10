@@ -7,7 +7,7 @@
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup lift({14, -15}, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
+pros::MotorGroup lift({14, 15}, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
 
 lemlib::Drivetrain Drivetrain(
     lemlib::MotorGroup({1, 2, 3}, lemlib::Cartridge::BLUE),
