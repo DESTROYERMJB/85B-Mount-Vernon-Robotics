@@ -26,6 +26,13 @@ void opcontrol() {
         } else {
             lift.move(0);
         }
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+            intake.move(127);
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            intake.move(-127);
+        } else {
+            intake.move(0);
+        }
         chassis.driverControl(master);
         pros::delay(10);
         

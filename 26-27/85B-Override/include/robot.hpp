@@ -9,6 +9,7 @@ extern pros::Controller master;
 
 /** the lift motors (defined in robot.cpp) */
 extern pros::MotorGroup lift;
+extern pros::MotorGroup intake;
 
 /**
  * the robot's single Chassis instance, wiring together the drivetrain, odometry, and motion
