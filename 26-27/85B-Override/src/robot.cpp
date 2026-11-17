@@ -1,15 +1,27 @@
 #include "robot.hpp"
 #include "hardware/IMU/V5InertialSensor.hpp"
 #include "pros/abstract_motor.hpp"
+#include "pros/adi.hpp"
+#include "pros/distance.hpp"
 #include "pros/motor_group.hpp"
+#include "pros/vision.hpp"
 
 // Plain numbers below are in the standard units defined in UnitConfig.hpp (inches, degrees, milliseconds, rpm).
 // TODO: confirm ports, cartridges, offsets, wheel sizes, and measurements, then tune the controllers
 
-pros::Controller master(pros::E_CONTROLLER_MASTER);
+pros::Controller driveController(pros::E_CONTROLLER_MASTER);
+pros::Controller liftController(pros::E_CONTROLLER_PARTNER);
 
+pros::adi::Pneumatics blockerPiston('B', false);
 pros::MotorGroup intake({10,11}, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
+pros::adi::Pneumatics intakePiston('A', false);
 pros::MotorGroup lift({-14, 15}, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
+pros::adi::Pneumatics wrist('C', false);
+pros::adi::Pneumatics claw('D', false);
+pros::Distance leftDistance(10);
+pros::Distance rightDistance(11);
+pros::Vision leftColor(12);
+pros::Vision rightColor(13);
 
 lemlib::Drivetrain drivetrain(
     lemlib::MotorGroup({1, 2, 3}, lemlib::Cartridge::BLUE),
@@ -25,9 +37,9 @@ lemlib::AngularController angularController(0.05, 0, 0, 0, 1, 2000, 3, 500, 0);
 
 // odom sensors. Rotation sensors on smart ports (negative port = reversed)
 // TODO: confirm ports, reversals, wheel diameters, and offsets
-lemlib::V5InertialSensor imu(1);
-lemlib::TrackingWheel verticalTracker(2, 2.75_in, 26.5_cm / 2);
-lemlib::TrackingWheel horizontalTracker(-3, 2.75_in, -26.5_cm / 2);
+lemlib::V5InertialSensor imu(7);
+lemlib::TrackingWheel verticalTracker(8, 2.75_in, 26.5_cm / 2);
+lemlib::TrackingWheel horizontalTracker(-9, 2.75_in, -26.5_cm / 2);
 lemlib::OdomSensors odomSensors(verticalTracker, horizontalTracker, imu);
 
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, odomSensors, lemlib::DriveType::TANK);
