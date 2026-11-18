@@ -14,7 +14,7 @@ extern pros::Controller liftController;
 
 /** the lift motors (defined in robot.cpp) */
 extern pros::MotorGroup lift;
-extern pros::MotorGroup intake;
+extern pros::Motor intake;
 
 extern pros::adi::Pneumatics intakePiston;
 extern pros::adi::Pneumatics blockerPiston;
