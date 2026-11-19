@@ -4,7 +4,7 @@
 #include "pros/misc.hpp"
 #include "pros/motor_group.hpp"
 #include "pros/adi.hpp"
-#include "pros/vision.hpp"
+#include "pros/optical.hpp"
 #include "pros/distance.hpp"
 
 /** the driver controller (defined in robot.cpp) */
@@ -24,8 +24,8 @@ extern pros::adi::Pneumatics claw;
 extern pros::Distance leftDistance;
 extern pros::Distance rightDistance;
 
-extern pros::Vision leftColor;
-extern pros::Vision rightColor;
+extern pros::Optical leftColor;
+extern pros::Optical rightColor;
 
 /**
  * the robot's single Chassis instance, wiring together the drivetrain, odometry, and motion

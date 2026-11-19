@@ -74,6 +74,11 @@ void Chassis::setPose(double x, double y, double heading) {
     m_odom.setPose({unit_config::length(x), unit_config::length(y), unit_config::heading(heading)});
 }
 
+void Chassis::setBrakeMode(lemlib::BrakeMode brakeMode) {
+    m_drivetrain.leftMotors.setBrakeMode(brakeMode);
+    m_drivetrain.rightMotors.setBrakeMode(brakeMode);
+}
+
 void Chassis::turnToHeading(double heading, double timeout, TurnToParams params, bool async,
                             std::optional<uint32_t> priority) {
     const std::variant<Angle, units::V2Position> target = unit_config::heading(heading);

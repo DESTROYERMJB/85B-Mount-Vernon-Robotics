@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <functional>
 #include <optional>
-#include <variant>
 #include <vector>
 #include "hardware/IMU/IMU.hpp"
 #include "hardware/Motor/MotorGroup.hpp"
@@ -251,6 +250,12 @@ class Chassis {
          * @param heading heading (standard heading unit)
          */
         void setPose(double x, double y, double heading);
+        
+        /** @brief Sets the brake mode for the drivetrain
+         *
+         * @param brakeMode the brake mode to set
+         */
+        void setBrakeMode(lemlib::BrakeMode brakeMode);
 
         /**
          * @brief Turn the robot to face a heading
