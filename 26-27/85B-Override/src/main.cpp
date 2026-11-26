@@ -272,33 +272,51 @@ void interactions() {
             spinReverse = false;
             pros::delay(10);
         }
+        
     }
 }
 
 bool wristExtended = false;
+bool wristPrevButton = false;
+
 bool clawClamped = false;
+bool clawPrevButton = false;
 
 void placement() {
     while (true) {
-        if (driveController.get_digital(pros::E_CONTROLLER_DIGITAL_X) && !wristExtended) {
-            wrist.extend();
-            wristExtended = true;
-            pros::delay(100);
-        } else if (driveController.get_digital(pros::E_CONTROLLER_DIGITAL_X) && wristExtended) {
-            wrist.retract();
-            wristExtended = false;
-            pros::delay(100);
+        // --- Wrist Control ---
+        if (liftController.is_connected()) {
+            bool wristCurrButton = liftController.get_digital(pros::E_CONTROLLER_DIGITAL_X);
+            
+            // Trigger only on the rising edge (when the button is newly pressed down)
+            if (wristCurrButton && !wristPrevButton) {
+                if (!wristExtended) {
+                    wrist.extend();
+                    wristExtended = true;
+                } else {
+                    wrist.retract();
+                    wristExtended = false;
+                }
+            }
+            wristPrevButton = wristCurrButton;
         }
-        if (driveController.get_digital(pros::E_CONTROLLER_DIGITAL_A) && !clawClamped) {
-            claw.extend();
-            clawClamped = true;
-            pros::delay(100);
-        } else if (driveController.get_digital(pros::E_CONTROLLER_DIGITAL_A) && clawClamped) {
-            claw.retract();
-            clawClamped = false;
-            pros::delay(100);
+
+        // --- Claw Control ---
+        bool clawCurrButton = driveController.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+        
+        // Trigger only on the rising edge
+        if (clawCurrButton && !clawPrevButton) {
+            if (!clawClamped) {
+                claw.extend();
+                clawClamped = true;
+            } else {
+                claw.retract();
+                clawClamped = false;
+            }
         }
-        pros::delay(10);
+        clawPrevButton = clawCurrButton;
+
+        pros::delay(10); // Prevents the task from hogging CPU resources
     }
 }
 
@@ -315,13 +333,15 @@ void opcontrol() {
     pros::Task InteractionsTask(interactions);
     pros::Task placementTask(placement);
     while (true) {
-        if (driveController.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+    if(liftController.is_connected()){
+        if (liftController.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             lift.move(127);
-        } else if (driveController.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        } else if (liftController.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             lift.move(-127);
         } else {
             lift.move(0);
         }
+    }
         chassis.driverControl(driveController);
         update_telemetry_ui(chassis.getX(), chassis.getY(), chassis.getHeading());
         pros::delay(10);

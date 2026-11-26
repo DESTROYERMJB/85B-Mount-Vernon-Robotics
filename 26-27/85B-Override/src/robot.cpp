@@ -12,9 +12,10 @@
 pros::Controller driveController(pros::E_CONTROLLER_MASTER);
 pros::Controller liftController(pros::E_CONTROLLER_PARTNER);
 
-pros::adi::Pneumatics blockerPiston('B', false);
+pros::adi::Pneumatics blockerPiston('H', false);
 pros::Motor intake(19, pros::MotorGearset::blue, pros::MotorEncoderUnits::degrees);
-pros::adi::Pneumatics intakePiston('A', false);
+pros::adi::Pneumatics intakeUpDown('A', true);
+pros::adi::Pneumatics intakeBack('B', true);
 pros::MotorGroup lift({-11, 20}, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
 pros::adi::Pneumatics wrist('C', false);
 pros::adi::Pneumatics claw('D', false);
