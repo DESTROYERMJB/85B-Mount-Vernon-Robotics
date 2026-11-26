@@ -12,7 +12,7 @@
 pros::Controller driveController(pros::E_CONTROLLER_MASTER);
 pros::Controller liftController(pros::E_CONTROLLER_PARTNER);
 
-pros::adi::Pneumatics blockerPiston('B', false);
+pros::adi::Pneumatics blockerPiston('H', false);
 pros::Motor intake(19, pros::MotorGearset::blue, pros::MotorEncoderUnits::degrees);
 pros::adi::Pneumatics intakePiston('A', false);
 pros::MotorGroup lift({-11, 20}, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
@@ -22,6 +22,7 @@ pros::Distance leftDistance(5);
 pros::Distance rightDistance(6);
 pros::Optical leftColor(13);
 pros::Optical rightColor(7);
+pros::Distance intakeSensor(21);
 
 lemlib::Drivetrain drivetrain(
     lemlib::MotorGroup({-1, -2, -3}, lemlib::Cartridge::BLUE),
