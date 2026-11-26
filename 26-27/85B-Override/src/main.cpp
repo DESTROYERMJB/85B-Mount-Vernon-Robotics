@@ -277,19 +277,13 @@ void interactions() {
 }
 
 bool wristExtended = false;
-bool wristPrevButton = false;
-
 bool clawClamped = false;
-bool clawPrevButton = false;
 
 void placement() {
     while (true) {
-        // --- Wrist Control ---
+        // Wrist toggle using built-in rising edge detection
         if (liftController.is_connected()) {
-            bool wristCurrButton = liftController.get_digital(pros::E_CONTROLLER_DIGITAL_X);
-            
-            // Trigger only on the rising edge (when the button is newly pressed down)
-            if (wristCurrButton && !wristPrevButton) {
+            if (liftController.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
                 if (!wristExtended) {
                     wrist.extend();
                     wristExtended = true;
@@ -298,14 +292,10 @@ void placement() {
                     wristExtended = false;
                 }
             }
-            wristPrevButton = wristCurrButton;
         }
 
-        // --- Claw Control ---
-        bool clawCurrButton = driveController.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
-        
-        // Trigger only on the rising edge
-        if (clawCurrButton && !clawPrevButton) {
+        // Claw toggle using built-in rising edge detection
+        if (driveController.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
             if (!clawClamped) {
                 claw.extend();
                 clawClamped = true;
@@ -314,12 +304,10 @@ void placement() {
                 clawClamped = false;
             }
         }
-        clawPrevButton = clawCurrButton;
 
-        pros::delay(10); // Prevents the task from hogging CPU resources
+        pros::delay(10);
     }
 }
-
 // Pass your actual tracking variables into this function
 void update_telemetry_ui(double current_x, double current_y, double current_heading) {
     // lv_label_set_text_fmt allows you to format strings exactly like printf
